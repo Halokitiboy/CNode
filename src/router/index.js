@@ -1,15 +1,39 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-
+import Home from '@/pages/home'
+import Ask from '@/pages/ask'
+import Good from '@/pages/good'
+import Share from '@/pages/share'
+import TopicDetail from '@/pages/topicDetail'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      alias:'/home',
+      name: 'home',
+      component:Home
+    },
+    {
+      path: '/good',
+      name: 'good',
+      component: Good
+    },
+    {
+      path: '/ask',
+      name: 'ask',
+      component: Ask
+    },
+    {
+      path: '/share',
+      name: 'share',
+      component: Share
+    },
+    {
+      path: '/topicDetail/:id',
+      name: 'topicDetail',
+      component: TopicDetail
     }
   ]
 })
