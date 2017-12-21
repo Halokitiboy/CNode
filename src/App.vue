@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" >
     <header-body></header-body>
     <main class="el-main">
       <section class="main-content">
@@ -9,10 +9,10 @@
     </main>
   </div>
 </template>
-
 <script>
   import HeaderBody from './components/include/header.vue'
   import AsideLogin from './components/aside/aside.vue'
+  import {mapState} from 'vuex';
 
   export default {
     name: 'app',
@@ -25,9 +25,11 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
-      }
+      },
+
     },
-    components: {HeaderBody, AsideLogin}
+
+    components: { HeaderBody, AsideLogin}
   }
 </script>
 
@@ -37,7 +39,7 @@
     padding: 0;
     height: 100%;
     /**{*/
-      /*box-sizing: border-box;*/
+    /*box-sizing: border-box;*/
     /*}*/
     #app {
       font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -46,6 +48,9 @@
       text-align: center;
       color: #2c3e50;
       height: 100%;
+      .el-loading-mask{
+        position: fixed;
+      }
       .el-main {
         display: flex;
         width: 1240px;
@@ -53,6 +58,14 @@
         .main-content {
           border: 1px solid #aaa;
           flex: 1;
+          width: 100%;
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+          .ql-editor {
+            height: 200px;
+          }
         }
         .aside {
           width: 250px;

@@ -18,7 +18,9 @@
     </div>
     <el-pagination
       layout="prev, pager, next"
-      :total="1000">
+      :total="1000"
+     @current-change="handleCurrentChange"
+     >
     </el-pagination>
   </div>
 </template>
@@ -27,22 +29,33 @@
     name: 'home',
     data() {
       return {
-        data: []
+        data: [],
+        currentPage:1,
+        pageLimit:20
       }
     },
     methods: {
-      homeList() {
+      homeList(currentPage) {
         let vm = this;
-        vm.$service.getTopics('', {}, (res) => {
+        let params={
+          page: currentPage,
+          limit: vm.pageLimit
+        };
+        vm.$service.getTopics('', params, (res) => {
               console.log(res);
               vm.data=res.data;
         }, (res) => {
             console.log(res);
         })
+      },
+      handleCurrentChange(val) {
+        this.currentPage=val;
+        this.homeList(this.currentPage);
+        console.info(`当前页: ${val}`);
       }
     },
     mounted(){
-        this.homeList()
+        this.homeList(this.currentPage);
     }
   }
 
@@ -66,7 +79,7 @@
           flex:1;
         }
       div:nth-of-type(5){
-        width:200px;
+         width:200px;
       }
       img{
         width:50px;
