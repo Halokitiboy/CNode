@@ -1,6 +1,6 @@
 <template>
-    <div class="good" >
-          good
+    <div class="">
+
     </div>
 </template>
 <script>
@@ -8,15 +8,7 @@
 		name: '',
 		data() {
 			return {}
-		},
-    methods:{
-		  get(){
-
-      }
-    },
-    mounted(){
-
-    }
+		}
 	}
 
 </script>

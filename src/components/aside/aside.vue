@@ -1,6 +1,6 @@
 <template>
     <div class="aside">
-          <h3>登录</h3>
+          <h3 @click="">登录</h3>
           <p>没有账号？现在 <a href="javascript:;">注册</a></p>
     </div>
 </template>
@@ -9,7 +9,12 @@
 		name: '',
 		data() {
 			return {}
-		}
+		},
+    methods:{
+		   logon(){
+
+       }
+    }
 	}
 
 </script>

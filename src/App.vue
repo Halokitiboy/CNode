@@ -2,16 +2,17 @@
   <div id="app" >
     <header-body></header-body>
     <main class="el-main">
-      <section class="main-content">
         <router-view></router-view>
-      </section>
-      <aside-login></aside-login>
     </main>
+    <!--<mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"></mu-infinite-scroll>-->
+    <foot-body></foot-body>
   </div>
 </template>
 <script>
   import HeaderBody from './components/include/header.vue'
   import AsideLogin from './components/aside/aside.vue'
+  import FootBody from './components/include/footer.vue'
+  import Logon from './pages/login.vue'
   import {mapState} from 'vuex';
 
   export default {
@@ -19,17 +20,32 @@
     data() {
       return {
         activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex2: '1',
+        loading: false,
+        scroller: null
       }
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
+      loadMore () {
+        this.loading = true
+        setTimeout(() => {
+          for (let i = this.num; i < this.num + 10; i++) {
+            this.list.push('item' + (i + 1))
+          }
+          this.num += 10
+          this.loading = false
+        }, 2000)
+      }
 
     },
 
-    components: { HeaderBody, AsideLogin}
+    components: { HeaderBody, AsideLogin,FootBody,Logon},
+    mounted(){
+      this.scroller = this.$el;
+    }
   }
 </script>
 
@@ -38,6 +54,7 @@
     margin: 0;
     padding: 0;
     height: 100%;
+    background: #FAFAFA;
     /**{*/
     /*box-sizing: border-box;*/
     /*}*/
@@ -48,30 +65,27 @@
       text-align: center;
       color: #2c3e50;
       height: 100%;
+      display: flex;
+      flex-direction:column;
+      .mu-badge-float{
+        top: 0px;
+        right: -6px;
+      }
       .el-loading-mask{
         position: fixed;
       }
       .el-main {
+        flex:1;
         display: flex;
-        width: 1240px;
-        margin: auto;
-        .main-content {
-          border: 1px solid #aaa;
-          flex: 1;
-          width: 100%;
+        overflow-y: scroll;
           img {
             max-width: 100%;
             height: auto;
           }
           .ql-editor {
-            height: 200px;
+            height: 10rem;
           }
-        }
-        .aside {
-          width: 250px;
-          border: 1px solid #aaa;
-          margin-left: 10px;
-        }
+
       }
       .bs-header {
         background-color: #5A6167;

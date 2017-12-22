@@ -1,36 +1,30 @@
 <template>
-  <div class="detail" v-loading="isLoading">
+  <div class="detail">
     <div id="detail-content">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>详情</el-breadcrumb-item>
-      </el-breadcrumb>
       <h2>{{qustionData.title}}</h2>
       <p>
         发布于{{qustionData.createTime}} * 作者{{qustionData.authorName}} * 浏览{{qustionData.visitCount}} * 来自{{qustionData.from}}</p>
-      <hr>
+
       <section class="detail-content" v-html="qustionData.detailContent">
 
       </section>
     </div>
-    <hr>
     <section id="replies" class="detail-replies-content">
       <div class="detail-replies-head">{{replyCount}}回复</div>
       <div class="detail-reply-body" v-for="(item , key) in reliesList" :key="item.id">
-          <div class="detail-reply-author-head">
-            <div>
-              <img class="reply-head-img" :src="item.authorImg" alt="item.authorName">
-              <span>{{item.floor+1}}楼</span>
-              <p>{{item.authorName}}</p>
-            </div>
-            <div>
-              <span></span>
-                {{item.isUped}}
-              <span></span>
-            </div>
+        <div class="detail-reply-author-head">
+          <div>
+            <img class="reply-head-img" :src="item.authorImg" alt="item.authorName">
+            <span>{{item.floor + 1}}楼</span>
+            <p>{{item.authorName}}</p>
           </div>
-          <div class="reply-content" v-html="item.replyContent">
+          <div>
+            <i class="icon icon-thumbs-up"></i>
+            <i class="icon icon-reply"></i>
           </div>
+        </div>
+        <div class="reply-content" v-html="item.replyContent">
+        </div>
       </div>
       <div class="write-reply">
         <quill-editor v-model="content"
@@ -46,15 +40,14 @@
   </div>
 </template>
 <script>
-    import {mapState} from 'vuex'
+  import {mapState} from 'vuex'
+
   export default {
     name: '',
     data() {
       return {
         data: {},
-        components:{
-
-        },
+        components: {},
         qustionData: {
           title: null,
           createTime: null,
@@ -87,7 +80,7 @@
       onEditorReady(quill) {
         console.log('editor ready!', quill)
       },
-      onEditorChange({ quill, html, text }) {
+      onEditorChange({quill, html, text}) {
         console.log('editor change!', quill, html, text)
 //        this.content = html
       },
@@ -137,7 +130,7 @@
     },
     mounted() {
       this.getDetail();
-
+      console.log(sessionStorage.getItem('accesstoken'));
     }
   }
 
@@ -148,36 +141,45 @@
   @padding: 20px;
   @margin: 20px;
   .detail {
+    padding: 10px;
+    width: 100%;
     .el-breadcrumb {
       line-height: 50px;
       padding-left: @padding;
     }
     .detail-content {
       text-align: @leftTxt;
-      padding: @padding;
-
+      word-wrap: break-word;
     }
-    .detail-replies-content{
+    .detail-replies-content {
       text-align: @leftTxt;
-      .detail-reply-body{
+
+      .detail-reply-body {
         padding: @margin;
-        border:1px solid #aaa;
-        .reply-head-img{
-          width:50px;
-          height:50px;
+        border: 1px solid #aaa;
+        word-wrap: break-word;
+        .reply-head-img {
+          width: 50px;
+          height: 50px;
         }
-        .detail-reply-author-head{
+        .detail-reply-author-head {
           display: flex;
-          div:nth-of-type(1){
-            flex:2;
+          .icon {
+            &:hover {
+              cursor: pointer;
+            }
           }
-          div:nth-of-type(2){
-            width:100px;
+          div:nth-of-type(1) {
+            flex: 2;
+          }
+          div:nth-of-type(2) {
+            width: 50px;
+            text-align: right;
           }
         }
       }
-      .write-reply{
-        margin-top:@margin;
+      .write-reply {
+        margin-top: @margin;
       }
     }
 

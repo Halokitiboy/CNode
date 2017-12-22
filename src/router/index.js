@@ -5,15 +5,17 @@ import Ask from '@/pages/ask'
 import Good from '@/pages/good'
 import Share from '@/pages/share'
 import TopicDetail from '@/pages/topicDetail'
-Vue.use(Router)
+import Login from '@/pages/login'
+
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
-      alias:'/home',
+      alias: '/home',
       name: 'home',
-      component:Home
+      component: Home
     },
     {
       path: '/good',
@@ -34,6 +36,11 @@ export default new Router({
       path: '/topicDetail/:id',
       name: 'topicDetail',
       component: TopicDetail
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })
