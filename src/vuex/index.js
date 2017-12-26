@@ -7,7 +7,8 @@ const store = new Vuex.Store({
   state: {
     pageLoading: false,
     hasLogon: false,
-    showLogonPanel:false
+    showLogonPanel:false,
+    showBar:true
   },
   mutations: {
     hidePageLoading(state, payload) {
@@ -20,7 +21,9 @@ const store = new Vuex.Store({
     logonOut(state) {
       state.hasLogon = true;
     },
-    
+    showBar(state,payload){
+      state.showBar=payload.show;
+    }
   },
   actions: {
     hidePageLoading({commit}) {
@@ -31,7 +34,11 @@ const store = new Vuex.Store({
     },
     logonOut({commit}) {
       commit('logonOut');
+    },
+    showBar({commit},payload){
+      commit('showBar',payload);
     }
+    
   }
 });
 export default store;

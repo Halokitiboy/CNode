@@ -6,6 +6,7 @@ import Good from '@/pages/good'
 import Share from '@/pages/share'
 import TopicDetail from '@/pages/topicDetail'
 import Login from '@/pages/login'
+import UserInfo from '@/pages/userInfo'
 
 Vue.use(Router);
 
@@ -35,11 +36,19 @@ export default new Router({
     {
       path: '/topicDetail/:id',
       name: 'topicDetail',
+      props:'deep',
+      meta:'deep',
       component: TopicDetail
+    },
+    {
+      path:'/userInfo',
+      name:'userInfo',
+      component: UserInfo
     },
     {
       path: '/login',
       name: 'login',
+      meta:'deep',
       component: Login
     }
   ]

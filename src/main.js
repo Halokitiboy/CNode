@@ -5,24 +5,36 @@ import App from './App';
 import router from './router';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-import moment from 'moment';
-        moment.locale('zh-cn');
-Vue.use(MuseUI);
-import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
-import VueQuillEditor, { Quill } from 'vue-quill-editor';
-import store from './vuex/index';
-
-// require styles
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
-Vue.use(VueQuillEditor,{
+import moment from 'moment';
+import Toasted from 'vue-toasted';
+import Service from './serveice/serveConfig';
+import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
+import VueQuillEditor, {Quill} from 'vue-quill-editor';
+import store from './vuex/index';
+Vue.use(Toasted, {
+  theme: "primary",
+  position: "top-center",
+  duration: 2000,
+  icon: {
+    name: 'error'
+  }
+})
+moment.locale('zh-cn');
+Vue.use(MuseUI);
+Vue.config.productionTip = false;
+Vue.prototype.$service = Service;
+Vue.prototype.$moment = moment;
+Vue.prototype.$CryptoJS = CryptoJS;
+// require styles
+Vue.use(VueQuillEditor, {
   modules: {
     toolbar: [
-      [{ 'size': ['small', false, 'large', 'huge'] }],
+      [{'size': ['small', false, 'large', 'huge']}],
       ['bold', 'italic'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link', 'image']
+      [{'list': 'ordered'}, {'list': 'bullet'}]
     ],
     history: {
       delay: 1000,
@@ -31,19 +43,28 @@ Vue.use(VueQuillEditor,{
     }
   }
 });
-import Service from './serveice/serveConfig';
 const CryptoJS = require("crypto-js");
-Vue.config.productionTip = false;
-Vue.prototype.$service=Service;
-Vue.prototype.$moment=moment;
-Vue.prototype.$CryptoJS=CryptoJS;
-const accesstoken='07287e25-48a1-402b-88af-0841e945e961';
-sessionStorage.setItem('accesstoken', accesstoken);
+
+
+
+router.beforeEach((to, from, next) => {
+  // this route requires auth, check if logged in
+  // if not, redirect to login page.
+  console.log(to.meta);
+  if (to.meta === 'deep') {
+    store.dispatch('showBar', {show: false});
+    
+  } else {
+    store.dispatch('showBar', {show: true});
+    
+  }
+  next()
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 });

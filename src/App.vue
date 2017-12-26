@@ -1,11 +1,14 @@
 <template>
   <div id="app" >
-    <header-body></header-body>
+    <header-body :showBar="showBar"></header-body>
     <main class="el-main">
         <router-view></router-view>
     </main>
     <!--<mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"></mu-infinite-scroll>-->
-    <foot-body></foot-body>
+    <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
+    <mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">
+      <mu-raised-button label="Back Top" class="demo-raised-button" primary/>
+    </mu-back-top>
   </div>
 </template>
 <script>
@@ -19,15 +22,17 @@
     name: 'app',
     data() {
       return {
-        activeIndex: '1',
-        activeIndex2: '1',
         loading: false,
-        scroller: null
+        scroller: null,
+        urlPath:'home'
       }
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      backTopCallBack () {
+        window.alert('I back top!')
       },
       loadMore () {
         this.loading = true
@@ -35,16 +40,19 @@
           for (let i = this.num; i < this.num + 10; i++) {
             this.list.push('item' + (i + 1))
           }
-          this.num += 10
+          this.num += 10;
           this.loading = false
         }, 2000)
       }
-
     },
-
+      computed:{
+        ...mapState({
+          showBar:state=>state.showBar
+        })
+      },
     components: { HeaderBody, AsideLogin,FootBody,Logon},
     mounted(){
-      this.scroller = this.$el;
+//     this.urlPath=this.$route.name;
     }
   }
 </script>
@@ -55,9 +63,6 @@
     padding: 0;
     height: 100%;
     background: #FAFAFA;
-    /**{*/
-    /*box-sizing: border-box;*/
-    /*}*/
     #app {
       font-family: 'Avenir', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -67,17 +72,18 @@
       height: 100%;
       display: flex;
       flex-direction:column;
-      .mu-badge-float{
-        top: 0px;
-        right: -6px;
-      }
       .el-loading-mask{
         position: fixed;
+      }
+      .mu-badge-float {
+        top: 0px;
+        right: -5px;
       }
       .el-main {
         flex:1;
         display: flex;
         overflow-y: scroll;
+        flex-direction: column;
           img {
             max-width: 100%;
             height: auto;

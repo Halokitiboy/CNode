@@ -1,35 +1,50 @@
 <template>
-  <mu-appbar title="CNode">
-      <mu-badge slot="left">
-        <mu-icon-button icon="arrow_back"></mu-icon-button>
-      </mu-badge>
-      <mu-badge content="0" circle secondary slot="right">
-        <mu-icon-button icon="notifications"/>
-
-      </mu-badge>
-      <mu-badge slot="right">
-        <mu-icon-button icon="edit_mode" />
-      </mu-badge>
+  <mu-appbar title="CNode"  style="text-align: left" >
+    <mu-badge slot="left" v-show="!showBar" >
+      <mu-icon-button icon="arrow_back" @click="goBack"></mu-icon-button>
+    </mu-badge>
+    <mu-badge v-show="showBar" content="0" circle secondary slot="right">
+      <mu-icon-button icon="notifications"/>
+    </mu-badge>
+    <mu-badge v-show="showBar" slot="right">
+      <mu-icon-button icon="edit_mode"/>
+    </mu-badge>
   </mu-appbar>
 </template>
 <script>
+  import {mapState} from 'vuex'
   export default {
     name: '',
+    props:['showBar'],
     data() {
       return {
         activeIndex: '1',
-        activeIndex2: '1'
+        activeIndex2: '1',
       }
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      goBack(){
+        let vm=this;
+        vm.$router.go(-1);
+        console.log('-1')
       }
+    },
+    computed:{
+
+    },
+    create:{
+
+    },
+    mounted(){
     }
   }
 
 </script>
 <style scoped lang="less">
+
   .bs-header {
     .header-ul {
       width: 1240px;

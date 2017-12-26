@@ -12,10 +12,10 @@ export default {
   getData(url, params, callback, errCallback) {
     Axios.get(url, {params: params})
       .then(function (response) {
-        callback(response.data);
+        callback(response);
       })
       .catch(function (error) {
-        errCallback(error.data)
+        errCallback(error)
       });
   },
   /**
@@ -26,7 +26,7 @@ export default {
    * @return {[type]}               [description]
    **/
   postData(url, params, callback, errCallback) {
-    Axios.post(url, {params: params})
+    Axios.post(url, params)
       .then(function (response) {
         callback(response);
       })
@@ -138,7 +138,7 @@ export default {
    * @param errcallback
    */
   topicReplies(id, params, callback, errcallback) {
-    this.postData(Apis['topicsReplies '] + id, params, callback, errcallback);
+    this.postData(Apis['topicsReplies'] + id, params, callback, errcallback);
   },
   /**
    * 为评论点赞
@@ -212,8 +212,8 @@ export default {
    * @param callback
    * @param errcallback
    */
-  markOneMessage(id,params,callback,errcallback){
-    this.postData(Apis['messageMarkOne']+id,params,callback,errcallback);
+  markOneMessage(id, params, callback, errcallback) {
+    this.postData(Apis['messageMarkOne'] + id, params, callback, errcallback);
   }
 }
 
