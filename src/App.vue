@@ -89,7 +89,7 @@
             height: auto;
           }
           .ql-editor {
-            height: 10rem;
+            height: 15rem;
           }
 
       }

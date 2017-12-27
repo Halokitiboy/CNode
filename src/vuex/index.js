@@ -8,7 +8,8 @@ const store = new Vuex.Store({
     pageLoading: false,
     hasLogon: false,
     showLogonPanel:false,
-    showBar:true
+    showBar:true,
+    accesstoken:''
   },
   mutations: {
     hidePageLoading(state, payload) {
@@ -19,10 +20,13 @@ const store = new Vuex.Store({
       state.hasLogon = true;
     },
     logonOut(state) {
-      state.hasLogon = true;
+      state.hasLogon = false;
     },
     showBar(state,payload){
       state.showBar=payload.show;
+    },
+    getAccesstoken(state,payload){
+      state.accesstoken=payload.accesstoken;
     }
   },
   actions: {
@@ -37,8 +41,10 @@ const store = new Vuex.Store({
     },
     showBar({commit},payload){
       commit('showBar',payload);
+    },
+    getAccesstoken({commit},payload){
+      commit('getAccesstoken',payload);
     }
-    
   }
 });
 export default store;

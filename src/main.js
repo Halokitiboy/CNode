@@ -21,7 +21,7 @@ Vue.use(Toasted, {
   icon: {
     name: 'error'
   }
-})
+});
 moment.locale('zh-cn');
 Vue.use(MuseUI);
 Vue.config.productionTip = false;
@@ -45,21 +45,24 @@ Vue.use(VueQuillEditor, {
 });
 const CryptoJS = require("crypto-js");
 
-
-
+let accesstoken=localStorage.getItem('accesstoken');
+let userInfo=localStorage.getItem('userInfo');
 router.beforeEach((to, from, next) => {
   // this route requires auth, check if logged in
   // if not, redirect to login page.
-  console.log(to.meta);
+  // 判断是否登录
+  if(accesstoken && userInfo){
+    store.dispatch('getAccesstoken',{accesstoken:localStorage.getItem('accesstoken')});
+    store.dispatch('logonIn');
+  }
+  //判断是否详情路由
   if (to.meta === 'deep') {
     store.dispatch('showBar', {show: false});
-    
   } else {
     store.dispatch('showBar', {show: true});
-    
   }
   next()
-})
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

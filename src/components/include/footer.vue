@@ -12,7 +12,6 @@
 <script>
   export default {
     name: '',
-//    props:['bottomNav'],
     data() {
       return {
         bottomNav:'home'
@@ -21,11 +20,8 @@
     methods:{
       handleChange (val) {
         let vm=this;
-
-//         vm.bottomNav=vm.$route.name;
          console.log(val,vm.$route.name);
          vm.bottomNav=val;
-
         vm.$router.push(`/${val}`);
       },
     },
@@ -33,7 +29,6 @@
       this.bottomNav=this.$route.name;
     }
   }
-
 </script>
 <style scoped lang="less">
     .mu-paper{

@@ -3,8 +3,8 @@
     <mu-paper class="demo-paper" :zDepth="2" v-for="(item ,index) in data" :key="index">
       <div class="home-item item">
         <div class="home-item-left">
-          <img :src="item.authorImg"/>
-          <p>{{item.authorName}}</p>
+          <img :src="item.avatar_url"/>
+          <p>{{item.loginname}}</p>
         </div>
         <div class="home-item-right">
           <div>{{item.tab}}</div>
@@ -12,12 +12,12 @@
             <router-link :to="{ name: 'topicDetail', params: { id: item.id }}"><p>{{item.title}}</p></router-link>
           </div>
           <div>
-            <p>最近更新：{{item.replyTime}}</p>
+            <p>最近更新：{{item.last_reply_at}}</p>
             <p>
               <i class="icon-eye-open"></i>
-              {{item.visitCount}}
+              {{item.visit_count}}
               <i class="icon-reply"></i>
-              {{item.replyCount}}
+              {{item.reply_count}}
             </p>
           </div>
         </div>
@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+  import moment from 'moment'
   export default {
     name: 'home',
     data() {
@@ -46,17 +47,18 @@
           limit: vm.pageLimit
         };
         vm.$service.getTopics('', params, (res) => {
-          if (res.success === true) {
+          if (res.data.success === true) {
             let results = res.data;
             vm.loading = false;
-            res.data.map(function (value, index) {
+            console.log(results)
+            results.data.map(function (value, index) {
               let obj = {};
-              obj.authorName = value.author.loginname;
-              obj.authorImg = value.author.avatar_url;
+              obj.loginname= value.author.loginname;
+              obj.avatar_url= value.author.avatar_url;
               obj.createTime = value.create_at;
-              obj.replyTime = vm.$moment(value.last_reply_at).startOf('mm').fromNow();
-              obj.replyCount = value.reply_count;
-              obj.visitCount = value.visit_count;
+              obj['last_reply_at'] = moment(value.last_reply_at).startOf('mm').fromNow();
+              obj.reply_count = value.reply_count;
+              obj.visit_count= value.visit_count;
               obj.top = value.top;
               obj.tab = value.tab;
               obj.title = value.title;
@@ -85,7 +87,6 @@
     mounted() {
       this.homeList(this.currentPage);
       this.scroller = this.$el;
-      console.log(this.$el);
     },
     components: {}
   }
@@ -110,7 +111,7 @@
         align-items: center;
         justify-content: center;
         padding: 1rem;
-        width: 6rem;
+        width: 5rem;
         word-break: break-all;
       }
       .home-item-right {
@@ -126,18 +127,15 @@
         div:nth-of-type(3) {
           display: flex;
           p:nth-of-type(1) {
-            flex: 3;
+            flex: 4;
             text-align: left;
           }
           p:nth-of-type(2) {
-            flex: 2;
+            flex: 3;
             text-align: right;
           }
         }
       }
-
-
-
       div:nth-of-type(2) {
         flex: 1;
       }
@@ -154,7 +152,6 @@
       border-bottom: 1px solid #aaa;
     }
     .item {
-
       :last-of-type {
         border-bottom: none;
       }

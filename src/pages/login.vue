@@ -22,13 +22,14 @@
         vm.$service.checkAccesstoken('', {accesstoken: accesstoken}, (res) => {
           let results=res.data;
           if(results.success=== true){
-
             localStorage.setItem('accesstoken', accesstoken);
             localStorage.setItem('userInfo',JSON.stringify(results));
-            vm.$router.push({name:'/home'});
+            vm.$router.go(-1);
+            vm.$store.dispatch('getAccesstoken',{accesstoken:accesstoken});
+            vm.$store.dispatch('logonIn');
           }
         }, (res) => {
-          console.log(res)
+          vm.$toasted.show(res);
         })
       }
     }

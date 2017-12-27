@@ -7,9 +7,8 @@ import Share from '@/pages/share'
 import TopicDetail from '@/pages/topicDetail'
 import Login from '@/pages/login'
 import UserInfo from '@/pages/userInfo'
-
+import NewTopic from '@/pages/newTopic'
 Vue.use(Router);
-
 export default new Router({
   routes: [
     {
@@ -46,10 +45,16 @@ export default new Router({
       component: UserInfo
     },
     {
-      path: '/login',
+      path: '/login/:redirect',
       name: 'login',
       meta:'deep',
       component: Login
+    },
+    {
+      path:'/newTopic',
+      name:'newTopic',
+      meta:'deep',
+      component:NewTopic
     }
   ]
 })

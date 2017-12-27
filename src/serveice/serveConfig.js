@@ -14,9 +14,9 @@ export default {
       .then(function (response) {
         callback(response);
       })
-      .catch(function (error) {
-        errCallback(error)
-      });
+      .catch((error) => {
+        errCallback(error);
+        });
   },
   /**
    * [postData]
@@ -27,11 +27,11 @@ export default {
    **/
   postData(url, params, callback, errCallback) {
     Axios.post(url, params)
-      .then(function (response) {
+      .then( (response)=> {
         callback(response);
       })
-      .catch(function (error) {
-        errCallback(error);
+      .catch( (error) =>{
+        errCallback(error.response.data['error_msg']);
       });
   },
   /**
@@ -74,7 +74,7 @@ export default {
    * @param callback
    * @param errcallback
    */
-  newTopic(id, parmas, callback, errcallback) {
+  newTopic(id, params, callback, errcallback) {
     this.postData(Apis['topics'] + id, params, callback, errcallback);
   },
   /**
