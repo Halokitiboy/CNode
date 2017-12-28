@@ -1,10 +1,9 @@
 <template>
-  <div id="app" >
+  <div id="app">
     <header-body :showBar="showBar"></header-body>
     <main class="el-main">
         <router-view></router-view>
     </main>
-    <!--<mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore"></mu-infinite-scroll>-->
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
     <mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">
       <mu-raised-button label="Back Top" class="demo-raised-button" primary/>
@@ -17,24 +16,23 @@
   import FootBody from './components/include/footer.vue'
   import Logon from './pages/login.vue'
   import {mapState} from 'vuex';
-
   export default {
     name: 'app',
     data() {
       return {
         loading: false,
         scroller: null,
-        urlPath:'home'
+        urlPath: 'home'
       }
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      backTopCallBack () {
+      backTopCallBack() {
         window.alert('I back top!')
       },
-      loadMore () {
+      loadMore() {
         this.loading = true
         setTimeout(() => {
           for (let i = this.num; i < this.num + 10; i++) {
@@ -45,13 +43,13 @@
         }, 2000)
       }
     },
-      computed:{
-        ...mapState({
-          showBar:state=>state.showBar
-        })
-      },
-    components: { HeaderBody, AsideLogin,FootBody,Logon},
-    mounted(){
+    computed: {
+      ...mapState({
+        showBar: state => state.showBar
+      })
+    },
+    components: {HeaderBody, AsideLogin, FootBody, Logon},
+    mounted() {
 //     this.urlPath=this.$route.name;
     }
   }
@@ -71,8 +69,8 @@
       color: #2c3e50;
       height: 100%;
       display: flex;
-      flex-direction:column;
-      .el-loading-mask{
+      flex-direction: column;
+      .el-loading-mask {
         position: fixed;
       }
       .mu-badge-float {
@@ -80,18 +78,101 @@
         right: -5px;
       }
       .el-main {
-        flex:1;
+        flex: 1;
         display: flex;
         overflow-y: scroll;
         flex-direction: column;
-          img {
-            max-width: 100%;
-            height: auto;
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+        .ql-editor {
+          height: 15rem;
+        }
+        .submit-btn {
+          margin: 10px 0;
+        }
+        .wrap {
+          padding: 10px;
+          width: 100%;
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+          .mu-paper {
+            margin: 1rem 0;
           }
-          .ql-editor {
-            height: 15rem;
+          .wrap-head {
+            line-height: 50px;
           }
-
+          .wrap-item {
+            display: flex;
+            /*line-height: 50px;*/
+            .wrap-item-left {
+              align-items: center;
+              justify-content: center;
+              padding: 1rem;
+              width: 5rem;
+              word-break: break-all;
+            }
+            .wrap-item-right {
+              padding: 1rem;
+              .tabs {
+                span {
+                  display: inline-block;
+                  padding: .2rem .4rem;
+                  color: #fff;
+                  border-radius: .2rem;
+                  &.top {
+                    background: #f44336;
+                  }
+                  &.good {
+                    background: #f89406;
+                  }
+                  &.tab {
+                    background: #7E57C2;
+                  }
+                }
+              }
+              div:nth-of-type(1) {
+                text-align: left;
+              }
+              div:nth-of-type(2) {
+                text-align: left;
+                text-overflow: ellipsis;
+                overflow: hidden;
+              }
+              div:nth-of-type(3) {
+                display: flex;
+                p:nth-of-type(1) {
+                  flex: 4;
+                  text-align: left;
+                }
+                p:nth-of-type(2) {
+                  flex: 3;
+                  text-align: right;
+                }
+              }
+            }
+            div:nth-of-type(2) {
+              flex: 1;
+            }
+            div:nth-of-type(3) {
+              flex: 1;
+            }
+            div:nth-of-type(5) {
+              width: 200px;
+            }
+            img {
+              width: 50px;
+              height: 50px;
+            }
+            border-bottom: 1px solid #aaa;
+          }
+          .item {
+            :last-of-type {
+              border-bottom: none;
+            }
+          }
+        }
       }
       .bs-header {
         background-color: #5A6167;

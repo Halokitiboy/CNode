@@ -1,13 +1,17 @@
 <template>
-  <div class="home" ref="wrap">
+  <div class="home wrap" ref="wrap">
     <mu-paper class="demo-paper" :zDepth="2" v-for="(item ,index) in data" :key="index">
-      <div class="home-item item">
-        <div class="home-item-left">
-          <img :src="item.avatar_url"/>
-          <p>{{item.loginname}}</p>
+      <div class="wrap-item item">
+        <div class="wrap-item-left">
+          <img :src="item.author.avatar_url"/>
+          <p>{{item.author.loginname}}</p>
         </div>
-        <div class="home-item-right">
-          <div>{{item.tab}}</div>
+        <div class="wrap-item-right">
+          <div class="tabs">
+            <span class="top" v-if="item.top">置顶</span>
+            <span class="good" v-if="item.good">精华</span>
+            <span class="tab">{{item.tab}}</span>
+          </div>
           <div :title="item.title">
             <router-link :to="{ name: 'topicDetail', params: { id: item.id }}"><p>{{item.title}}</p></router-link>
           </div>
@@ -27,7 +31,8 @@
   </div>
 </template>
 <script>
-  import moment from 'moment'
+  import tabCheck from '../lib/tab';
+
   export default {
     name: 'home',
     data() {
@@ -44,44 +49,45 @@
         let vm = this;
         let params = {
           page: currentPage,
-          limit: vm.pageLimit
+          limit: vm.pageLimit,
+          tab: ''
         };
         vm.$service.getTopics('', params, (res) => {
           if (res.data.success === true) {
             let results = res.data;
             vm.loading = false;
-            console.log(results)
-            results.data.map(function (value, index) {
-              let obj = {};
-              obj.loginname= value.author.loginname;
-              obj.avatar_url= value.author.avatar_url;
-              obj.createTime = value.create_at;
-              obj['last_reply_at'] = moment(value.last_reply_at).startOf('mm').fromNow();
-              obj.reply_count = value.reply_count;
-              obj.visit_count= value.visit_count;
-              obj.top = value.top;
-              obj.tab = value.tab;
-              obj.title = value.title;
-              obj.author_id = value.author_id;
-              obj.good = value.good;
-              obj.id = value.id;
-              vm.data.push(obj);
-            })
+            results.data.map(function (item, index) {
+              item['last_reply_at'] = vm.$moment(item.last_reply_at).startOf('mm').fromNow();
+              item['tab'] = tabCheck(item.tab);
+            });
+            vm.data = vm.data.concat(results.data);
           }
         }, (res) => {
-          console.log(res);
+          vm.$toasted.show(res);
         })
       },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-        this.homeList(this.currentPage);
-        console.info(`当前页: ${val}`);
+      loadMore() {
+        let vm = this;
+        vm.loading = true;
+        vm.currentPage += 1;
+        vm.homeList(vm.currentPage);
       },
-      loadMore () {
-        let vm=this;
-          vm.loading = true;
-          vm.currentPage+=1;
-          vm.homeList(vm.currentPage);
+      tabCheck(tab) {
+        let nameTab = '';
+        switch (tab) {
+          case 'share':
+            nameTab = '分享';
+            break;
+          case 'good':
+            nameTab = '精华';
+            break;
+          case 'ask':
+            nameTab = '问答';
+            break;
+          default:
+            break;
+        }
+        return nameTab;
       }
     },
     mounted() {
@@ -90,71 +96,7 @@
     },
     components: {}
   }
-
 </script>
 <style scoped lang="less">
-  .home {
-    padding: 10px;
-    width: 100%;
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    .mu-paper {
-      margin: 1rem 0;
-    }
-    .home-head {
-      line-height: 50px;
-    }
-    .home-item {
-      display: flex;
-      /*line-height: 50px;*/
-      .home-item-left{
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        width: 5rem;
-        word-break: break-all;
-      }
-      .home-item-right {
-        padding: 1rem;
-        div:nth-of-type(1){
-          text-align: left;
-        }
-        div:nth-of-type(2) {
-          text-align: left;
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
-        div:nth-of-type(3) {
-          display: flex;
-          p:nth-of-type(1) {
-            flex: 4;
-            text-align: left;
-          }
-          p:nth-of-type(2) {
-            flex: 3;
-            text-align: right;
-          }
-        }
-      }
-      div:nth-of-type(2) {
-        flex: 1;
-      }
-      div:nth-of-type(3) {
-        flex: 1;
-      }
-      div:nth-of-type(5) {
-        width: 200px;
-      }
-      img {
-        width: 50px;
-        height: 50px;
-      }
-      border-bottom: 1px solid #aaa;
-    }
-    .item {
-      :last-of-type {
-        border-bottom: none;
-      }
-    }
-  }
+
 </style>

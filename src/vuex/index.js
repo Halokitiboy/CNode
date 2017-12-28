@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     hasLogon: false,
     showLogonPanel:false,
     showBar:true,
-    accesstoken:''
+    accesstoken:'',//存取用户accesstoken
+    userInfo:''//存取用户信息
   },
   mutations: {
     hidePageLoading(state, payload) {
@@ -20,6 +21,8 @@ const store = new Vuex.Store({
       state.hasLogon = true;
     },
     logonOut(state) {
+      localStorage.clear();
+      sessionStorage.clear();
       state.hasLogon = false;
     },
     showBar(state,payload){
@@ -27,6 +30,12 @@ const store = new Vuex.Store({
     },
     getAccesstoken(state,payload){
       state.accesstoken=payload.accesstoken;
+    },
+    getUserInfo(state){
+      state.userInfo=JSON.parse(localStorage.getItem('userInfo'))|| JSON.parse(sessionStorage.getItem('userInfo'));
+    },
+    clearUserInfo(state){
+      state.userInfo='';
     }
   },
   actions: {
@@ -44,6 +53,12 @@ const store = new Vuex.Store({
     },
     getAccesstoken({commit},payload){
       commit('getAccesstoken',payload);
+    },
+    getUserInfo({commit},payload){
+      commit('getUserInfo',payload);
+    },
+    clearUserInfo({commit}){
+      commit('clearUserInfo');
     }
   }
 });

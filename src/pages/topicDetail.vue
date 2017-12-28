@@ -1,12 +1,10 @@
 <template>
-  <div class="detail">
+  <div class="detail" v-show="showPage">
     <div id="detail-content">
       <h2>{{qustionData.title}}</h2>
       <p>
-        发布于{{qustionData.createTime}} * 作者{{qustionData.authorName}} * 浏览{{qustionData.visitCount}} * 来自{{qustionData.from}}</p>
-
-      <section class="detail-content" v-html="qustionData.detailContent">
-
+        发布于{{qustionData.create_at}} * 作者{{qustionData.loginname}} * 浏览{{qustionData.visit_count}} * 来自{{qustionData.tab}}</p>
+      <section class="detail-content" v-html="qustionData.content">
       </section>
     </div>
     <section id="replies" class="detail-replies-content">
@@ -14,21 +12,21 @@
       <div class="detail-reply-body" v-for="(item , key) in reliesList" :key="item.id">
         <div class="detail-reply-author-head">
           <div>
-            <img class="reply-head-img" :src="item.authorImg" alt="item.authorName">
-            <span>{{item.floor + 1}}楼</span>
-            <p>{{item.authorName}}</p>
+            <img class="reply-head-img" :src="item.avatar_url" alt="item.author.loginname">
+            <span>{{key + 1}}楼</span>
+            <p>{{item.loginname}}</p>
           </div>
           <div>
-            <i class="icon icon-thumbs-up" :reply_to_id="item.replyToId" :reply_id="item.id" :id="item.id"
+            <i class="icon icon-thumbs-up" :reply_to_id=" item.reply_id || '' " :reply_id="item.id" :id="item.id"
                @click="topicUps"></i>
-            <span>{{item.upsNum}}</span>
+            <span>{{item.ups}}</span>
             <!--<i class="icon icon-reply" :reply_to_id="item.replyToId" :reply_id="item.id" :id="item.id"-->
-               <!--@click="goToRePly"></i>-->
+            <!--@click="goToRePly"></i>-->
           </div>
         </div>
-        <div class="reply-content" v-html="item.replyContent">
+        <div class="reply-content" v-html="item.content">
         </div>
-        <span>最新回复时间：{{item.createTime}}</span>
+        <span>最新回复时间：{{item.create_at}}</span>
       </div>
       <div class="write-reply">
         <quill-editor v-model="replyData.content"
@@ -39,39 +37,35 @@
         <mu-raised-button class="submit-btn" label="回 复" fullWidth @click="topicReply" primary/>
       </div>
     </section>
+    <mu-float-button icon="star"  class="float-button" @click="collectTopic" backgroundColor=""/>
   </div>
 </template>
 <script>
   import {mapState} from 'vuex'
   import VueStar from 'vue-star'
+  import tabCheck from '../lib/tab';
+
   export default {
     name: '',
+    props: ['id'],
     components: {VueStar},
     data() {
       return {
         topPopup: false,
         data: {},
-
-        qustionData: {
-          title: null,
-          createTime: null,
-          detailContent: null,
-          authorName: null,
-          authorImg: null,
-          visitCount: null,
-          from: null
-        },
+        qustionData: {},
         reliesList: [],
         replyCount: 0,
+        isCollect:null,
         replyData: {
           content: '',
-          text:'',
+          text: '',
           replyId: '',//回复另一个评论
         },
         editorOption: {
           // some quill options
         },
-        id: ''
+        showPage: false
       }
     },
     computed: {
@@ -82,11 +76,10 @@
     methods: {
       onEditorChange({quill, html, text}) {
         this.replyData.content = html;
-        this.replyData.text=text;
+        this.replyData.text = text;
       },
       getDetail() {
         let vm = this;
-        vm.id = vm.$route.params.id;
         let params = {
           'mdrender': true,
           'accesstoken': vm.accesstoken
@@ -96,28 +89,16 @@
           let results = res.data;
           vm.reliesList = [];
           if (results.success === true) {
-            vm.data = results.data;
-            vm.qustionData.detailContent = results.data.content;
-            vm.qustionData.createTime = vm.$moment(results.data.create_at).startOf('mm').fromNow();
-            vm.qustionData.authorName = results.data.author.loginname;
-            vm.qustionData.authorImg = results.data.author.avatar_url;
-            vm.qustionData.from = results.data.tab;
-            vm.qustionData.title = results.data.title;
-            vm.qustionData.visitCount = results.data.visit_count;
-            vm.replyCount = results.data.reply_count;
-            results.data.replies.map(function (value, index) {
-              let obj = {};
-              obj.authorName = value.author.loginname;
-              obj.authorImg = value.author.avatar_url;
-              obj.createTime = vm.$moment(value.create_at).startOf('mm').fromNow();
-              obj.replyId = value.reply_id;
-              obj.replyContent = value.content;
-              obj.id = value.id;
-              obj.upsNum=value.ups.length===0 ? '':value.ups.length;
-              obj.replyToId = value.reply_id || '';
-              obj.isUped = value.is_uped;
-              obj.floor = index;
-              vm.reliesList.push(obj)
+            vm.showPage = true;
+            vm.qustionData = results.data;
+            vm.isCollect=results.is_collect;
+            vm.qustionData.loginname = results.data.author.loginname;
+            vm.qustionData.tab = tabCheck(vm.qustionData.tab);
+            vm.qustionData.create_at = vm.$moment(results.data.create_at).startOf('mm').fromNow();
+            vm.reliesList = vm.qustionData.replies;
+            vm.reliesList.map(function (item, index) {
+              item['create_at'] = vm.$moment(item.create_at).startOf('mm').fromNow();
+              item['ups'] = item.ups.length === 0 ? '' : item.ups.length;
             });
           }
 
@@ -127,7 +108,7 @@
       },
       topicReply() {
         let vm = this;
-        if(!vm.isLogon){
+        if (!vm.isLogon) {
           vm.$toasted.show('请先登录！');
           return false;
         }
@@ -146,7 +127,6 @@
         } else {
           this.$toasted.show('回复不能为空');
         }
-
       },
       goToRePly() {
 
@@ -157,22 +137,58 @@
         let params = {
           accesstoken: vm.accesstoken
         };
+        if (!vm.isLogon) {
+          vm.$toasted.show('请先登录！')
+        }
         vm.$service.topicUps(`${replyId}/ups`, params, (res) => {
           vm.getDetail();
         }, (res) => {
           vm.$toasted.show(res);
+        })
+      },
+      collectTopic() {
+        let vm = this;
+        let params = {
+          accesstoken: vm.accesstoken,
+          topic_id: vm.id
+        };
+        vm.$service.collectTopic('', params, (res) => {
+          let results = res.data;
+          if (results.success === true) {
+            vm.$toasted.show('收藏成功');
+          } else {
+            vm.deleteTopicCollect();
+          }
+        }, (res) => {
+          vm.$toasted.show(res);
+        })
+      },
+      deleteTopicCollect() {
+        let vm = this;
+        let params = {
+          accesstoken: vm.accesstoken,
+          topic_id: vm.id
+        }
+        vm.$service.deleteTopicCollect('', params, (res) => {
+          let results = res.data;
+          if (results.success === true) {
+            vm.$toasted.show('取消收藏');
+          }
+        }, (res) => {
+
         })
       }
     },
     computed: {
       ...mapState({
         isLoading: state => state.pageLoading,
-        accesstoken:state=>state.accesstoken,
-        isLogon:state=>state.hasLogon
+        accesstoken: state => state.accesstoken,
+        isLogon: state => state.hasLogon
       })
     },
     mounted() {
       this.getDetail();
+      console.log(this.id);
     }
   }
 
@@ -182,10 +198,17 @@
   @leftTxt: left;
   @padding: 20px;
   @margin: 20px;
+  .bb{
+    background-color: #f44336;
+  }
   .detail {
     padding: 10px;
     width: 100%;
-
+    .float-button {
+      position: fixed;
+      right: 0;
+      top: 80%;
+    }
     .el-breadcrumb {
       line-height: 50px;
       padding-left: @padding;
@@ -225,8 +248,8 @@
         margin-top: @margin;
       }
     }
-    .submit-btn{
-      margin:1rem 0;
+    .submit-btn {
+      margin: 1rem 0;
     }
   }
 </style>

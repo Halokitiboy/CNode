@@ -14,6 +14,7 @@ import Service from './serveice/serveConfig';
 import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
 import VueQuillEditor, {Quill} from 'vue-quill-editor';
 import store from './vuex/index';
+
 Vue.use(Toasted, {
   theme: "primary",
   position: "top-center",
@@ -45,14 +46,15 @@ Vue.use(VueQuillEditor, {
 });
 const CryptoJS = require("crypto-js");
 
-let accesstoken=localStorage.getItem('accesstoken');
-let userInfo=localStorage.getItem('userInfo');
+let accesstoken = localStorage.getItem('accesstoken') || sessionStorage.getItem('accesstoken');
+let userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
 router.beforeEach((to, from, next) => {
   // this route requires auth, check if logged in
   // if not, redirect to login page.
   // 判断是否登录
-  if(accesstoken && userInfo){
-    store.dispatch('getAccesstoken',{accesstoken:localStorage.getItem('accesstoken')});
+  if (accesstoken && userInfo) {
+    store.dispatch('getAccesstoken', {'accesstoken': accesstoken});
+    store.dispatch('getUserInfo',{'userInfo':userInfo});
     store.dispatch('logonIn');
   }
   //判断是否详情路由

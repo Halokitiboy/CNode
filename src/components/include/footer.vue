@@ -2,9 +2,9 @@
   <mu-paper>
     <mu-bottom-nav :value="bottomNav" @change="handleChange">
       <mu-bottom-nav-item value="home" title="首页" icon="home" />
-      <mu-bottom-nav-item value="good" title="精品" icon="favorite" />
+      <mu-bottom-nav-item value="good" title="精华" icon="favorite" />
       <mu-bottom-nav-item value="share" title="分享" icon="share" />
-      <mu-bottom-nav-item value="ask" title="问答" icon="location_on" />
+      <mu-bottom-nav-item value="ask" title="问答" icon="error" />
       <mu-bottom-nav-item value="userInfo" title="我的" icon="person_pin" />
     </mu-bottom-nav>
   </mu-paper>
@@ -20,7 +20,6 @@
     methods:{
       handleChange (val) {
         let vm=this;
-         console.log(val,vm.$route.name);
          vm.bottomNav=val;
         vm.$router.push(`/${val}`);
       },

@@ -35,20 +35,22 @@ export default new Router({
     {
       path: '/topicDetail/:id',
       name: 'topicDetail',
-      props:'deep',
       meta:'deep',
-      component: TopicDetail
+      component: TopicDetail,
+      props:true
     },
     {
       path:'/userInfo',
       name:'userInfo',
-      component: UserInfo
+      component: UserInfo,
+      props:true
     },
     {
       path: '/login/:redirect',
       name: 'login',
       meta:'deep',
-      component: Login
+      component: Login,
+      props:true
     },
     {
       path:'/newTopic',
@@ -56,5 +58,13 @@ export default new Router({
       meta:'deep',
       component:NewTopic
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    // return 期望滚动到哪个的位置
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

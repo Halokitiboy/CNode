@@ -30,7 +30,6 @@
 </template>
 <script>
   import {mapState} from 'vuex'
-
   export default {
     name: '',
     data() {
@@ -54,23 +53,24 @@
       onEditorChange({quill, html, text}) {
         this.content = html;
         this.text = text;
-        console.log(html);
       },
       handleChange(value) {
         this.value = value;
       },
       input(val) {
-        console.log(val);
         this.title = val;
       },
       checkTopicArea(val) {
-        console.log(val);
         this.tab = val;
       },
       submit() {
         let vm = this;
         if (vm.title === '') {
           vm.$toasted.show('标题不能为空！');
+          return false;
+        }
+        if (vm.title.length < 10) {
+          vm.$toasted.show('标题字数不能少于10个！');
           return false;
         }
         if (vm.tab === '') {
@@ -81,7 +81,6 @@
           vm.$toasted.show('内容不能为空！');
           return false;
         }
-
         let params = {
           accesstoken: vm.accesstoken,
           title: vm.title,
@@ -89,7 +88,8 @@
           content: vm.text
         };
         vm.$service.newTopic('', params, (res) => {
-          console.log(res)
+          vm.$toasted.show('发表成功！');
+          vm.$router.go(-1);
         }, (res) => {
           vm.$toasted.show(res);
         })
@@ -101,7 +101,6 @@
       })
     }
   }
-
 </script>
 <style scoped lang="less">
   .newTopic {
@@ -115,6 +114,7 @@
       .newTopic-radio {
         margin-right: 1rem;
       }
+
     }
   }
 </style>

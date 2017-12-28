@@ -6,7 +6,6 @@
         <p class="userInfo-name">{{userInfo.loginname}}</p>
       </mu-col>
       <mu-col width="100" tablet="50" desktop="33">
-        <!--<mu-menu-item title="退出" leftIcon="power_settings_new"/>-->
         <mu-flat-button label="退出" class="flat-button" icon="power_settings_new" backgroundColor="#7E57C2"
                         color="#FFF" @click="logonOut"/>
       </mu-col>
@@ -49,23 +48,19 @@
     name: '',
     data() {
       return {
-        userInfo: {},
         collectData: [],
         showPage: false,
-        activeTab: 'tab1'
+        activeTab: 'tab1',
+        info:null
       }
     },
     methods: {
       handleTabChange(val) {
         this.activeTab = val;
-        console.log(val);
-      },
-      handleActive() {
-        window.alert('tab active');
       },
       collectTopices() {
         let vm = this;
-        if(vm.hasLogon){
+        if (vm.hasLogon) {
           vm.$service.topicAllCollect(vm.userInfo.loginname, {}, (res) => {
             let results = res.data;
             if (results.data.length !== 0) {
@@ -76,35 +71,31 @@
             vm.$toasted.show(res);
           })
         }
-
       },
       checkedUser() {
         let vm = this;
-        if (localStorage.getItem('userInfo')) {
-          vm.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        if (vm.userInfo) {
+//          vm.info = JSON.parse(localStorage.getItem('userInfo')|| sessionStorage.getItem('userInfo'));
+          vm.collectTopices();
           vm.showPage = true;
-        } else {
-
         }
       },
       goLogin() {
         this.$router.push({name: 'login', params: {redirect: 'userInfo'}});
       },
-      logonOut(){
-        localStorage.clear();
+      logonOut() {
         this.$store.dispatch('logonOut');
-        this.showPage=false;
-        this.checkedUser();
+        this.showPage = false;
       }
     },
-    computed:{
+    computed: {
       ...mapState({
-          hasLogon:state=>state.hasLogon
-        })
+        hasLogon: state => state.hasLogon,
+        userInfo: state => state.userInfo
+      })
     },
     mounted() {
       this.checkedUser();
-      this.collectTopices();
     }
   }
 
@@ -112,8 +103,8 @@
 <style scoped lang="less">
   .userInfo {
     padding: 10px;
-    .flat-button{
-      margin:1rem 0;
+    .flat-button {
+      margin: 1rem 0;
     }
     .userInfo-avstar {
       width: 10rem;

@@ -3,11 +3,11 @@
     <mu-badge slot="left" v-show="!showBar" >
       <mu-icon-button icon="arrow_back" @click="goBack"></mu-icon-button>
     </mu-badge>
-    <mu-badge v-show="showBar" content="0" circle secondary slot="right">
-      <mu-icon-button icon="notifications"/>
+    <mu-badge v-show="showBar" content="0" circle secondary slot="right" >
+      <mu-icon-button icon="notifications" @click="checkInfo"/>
     </mu-badge>
     <mu-badge v-show="showBar" slot="right">
-      <mu-icon-button icon="edit_mode"/>
+      <mu-icon-button icon="edit_mode" @click="newTopic"/>
     </mu-badge>
   </mu-appbar>
 </template>
@@ -30,11 +30,29 @@
         let vm=this;
         vm.$router.go(-1);
         console.log('-1')
+      },
+      checkInfo(){
+        let vm=this;
+        if(!vm.hasLogon){
+            vm.$toasted.show('请先登录！')
+        }else{
+          vm.$router.push({name:'userInfo',query:{tab:'tab3'}});
+        }
+      },
+      newTopic(){
+        let vm=this;
+        if(!vm.hasLogon){
+          vm.$toasted.show('请先登录！')
+        }else{
+          vm.$router.push({name:'newTopic'});
+        }
       }
     },
-    computed:{
-
-    },
+    computed:({
+      ...mapState({
+        hasLogon:state=>state.hasLogon
+      })
+    }),
     create:{
 
     },
