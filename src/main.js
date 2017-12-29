@@ -11,7 +11,8 @@ import 'quill/dist/quill.bubble.css'
 import moment from 'moment';
 import Toasted from 'vue-toasted';
 import Service from './serveice/serveConfig';
-import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
+// import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
+// import 'font-awesome/css/font-awesome.css'
 import VueQuillEditor, {Quill} from 'vue-quill-editor';
 import store from './vuex/index';
 

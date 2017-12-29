@@ -5,9 +5,10 @@
         <router-view></router-view>
     </main>
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
-    <mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">
-      <mu-raised-button label="Back Top" class="demo-raised-button" primary/>
-    </mu-back-top>
+    <!--<mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">-->
+      <!--<mu-raised-button label="Back Top" class="demo-raised-button" primary/>-->
+    <!--</mu-back-top>-->
+    <mu-back-top/>
   </div>
 </template>
 <script>
@@ -30,7 +31,7 @@
         console.log(key, keyPath);
       },
       backTopCallBack() {
-        window.alert('I back top!')
+
       },
       loadMore() {
         this.loading = true
@@ -70,6 +71,9 @@
       height: 100%;
       display: flex;
       flex-direction: column;
+      .custom-icon{
+        font-size: inherit;
+      }
       .el-loading-mask {
         position: fixed;
       }

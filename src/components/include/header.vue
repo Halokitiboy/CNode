@@ -36,7 +36,7 @@
         if(!vm.hasLogon){
             vm.$toasted.show('请先登录！')
         }else{
-          vm.$router.push({name:'userInfo',query:{tab:'tab3'}});
+          vm.$router.push({name:'userInfo'});
         }
       },
       newTopic(){

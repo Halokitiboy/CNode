@@ -10,6 +10,7 @@
           <div class="tabs">
             <span class="top" v-if="item.top">置顶</span>
             <span class="good" v-if="item.good">精华</span>
+            <span class="tab">{{item.tab}}</span>
           </div>
           <div :title="item.title">
             <router-link :to="{ name: 'topicDetail', params: { id: item.id }}"><p>{{item.title}}</p></router-link>
@@ -17,9 +18,9 @@
           <div>
             <p>最近更新：{{item.last_reply_at}}</p>
             <p>
-              <i class="icon-eye-open"></i>
+              <i class="custom-icon material-icons">visibility</i>
               {{item.visit_count}}
-              <i class="icon-reply"></i>
+              <i class="custom-icon material-icons">reply</i>
               {{item.reply_count}}
             </p>
           </div>
@@ -30,6 +31,7 @@
   </div>
 </template>
 <script>
+  import tabCheck from '../lib/tab';
   export default {
     name: '',
     data() {
@@ -55,6 +57,7 @@
             vm.loading = false;
             results.data.map(function (item, index) {
               item['last_reply_at'] = vm.$moment(item.last_reply_at).startOf('mm').fromNow();
+              item['tab'] = tabCheck(item.tab);
             });
             vm.data = vm.data.concat(results.data);
           }

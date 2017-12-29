@@ -18,9 +18,9 @@
           <div>
             <p>最近更新：{{item.last_reply_at}}</p>
             <p>
-              <i class="icon-eye-open"></i>
+              <i class="custom-icon material-icons">visibility</i>
               {{item.visit_count}}
-              <i class="icon-reply"></i>
+              <i class="custom-icon material-icons">reply</i>
               {{item.reply_count}}
             </p>
           </div>

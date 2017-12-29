@@ -1,5 +1,5 @@
 <template>
-  <div class="detail" v-show="showPage">
+  <div class="detail warp" v-show="showPage">
     <div id="detail-content">
       <h2>{{qustionData.title}}</h2>
       <p>
@@ -8,17 +8,18 @@
       </section>
     </div>
     <section id="replies" class="detail-replies-content">
-      <div class="detail-replies-head">{{replyCount}}回复</div>
+      <div class="detail-replies-head"> <mu-raised-button :label="qustionData.reply_count+'条回复'" fullWidth primary/></div>
+
       <div class="detail-reply-body" v-for="(item , key) in reliesList" :key="item.id">
         <div class="detail-reply-author-head">
           <div>
-            <img class="reply-head-img" :src="item.avatar_url" alt="item.author.loginname">
+            <img class="reply-head-img" :src="item.author.avatar_url" :alt="item.author.loginname">
             <span>{{key + 1}}楼</span>
-            <p>{{item.loginname}}</p>
+            <p>{{item.author.loginname}}</p>
           </div>
           <div>
-            <i class="icon icon-thumbs-up" :reply_to_id=" item.reply_id || '' " :reply_id="item.id" :id="item.id"
-               @click="topicUps"></i>
+            <i class="custom-icon material-icons" :reply_to_id=" item.reply_id || '' " :reply_id="item.id" :id="item.id"
+               @click="topicUps">thumb_up</i>
             <span>{{item.ups}}</span>
             <!--<i class="icon icon-reply" :reply_to_id="item.replyToId" :reply_id="item.id" :id="item.id"-->
             <!--@click="goToRePly"></i>-->
@@ -37,7 +38,7 @@
         <mu-raised-button class="submit-btn" label="回 复" fullWidth @click="topicReply" primary/>
       </div>
     </section>
-    <mu-float-button icon="star"  class="float-button" @click="collectTopic" backgroundColor=""/>
+    <mu-float-button :icon="icon" class="float-button" @click="collectTopic" backgroundColor=""/>
   </div>
 </template>
 <script>
@@ -56,7 +57,8 @@
         qustionData: {},
         reliesList: [],
         replyCount: 0,
-        isCollect:null,
+        isCollect: null,
+        colollectIcon: 'star',
         replyData: {
           content: '',
           text: '',
@@ -66,11 +68,6 @@
           // some quill options
         },
         showPage: false
-      }
-    },
-    computed: {
-      editor() {
-        return this.$refs.myQuillEditor.quill
       }
     },
     methods: {
@@ -91,7 +88,7 @@
           if (results.success === true) {
             vm.showPage = true;
             vm.qustionData = results.data;
-            vm.isCollect=results.is_collect;
+            vm.isCollect = results.data.is_collect;
             vm.qustionData.loginname = results.data.author.loginname;
             vm.qustionData.tab = tabCheck(vm.qustionData.tab);
             vm.qustionData.create_at = vm.$moment(results.data.create_at).startOf('mm').fromNow();
@@ -128,9 +125,6 @@
           this.$toasted.show('回复不能为空');
         }
       },
-      goToRePly() {
-
-      },
       topicUps(e) {
         let vm = this;
         let replyId = e.target.attributes.id.nodeValue;
@@ -138,7 +132,8 @@
           accesstoken: vm.accesstoken
         };
         if (!vm.isLogon) {
-          vm.$toasted.show('请先登录！')
+          vm.$toasted.show('请先登录！');
+          return false;
         }
         vm.$service.topicUps(`${replyId}/ups`, params, (res) => {
           vm.getDetail();
@@ -152,8 +147,13 @@
           accesstoken: vm.accesstoken,
           topic_id: vm.id
         };
+        if (!vm.isLogon) {
+          vm.$toasted.show('请先登录！');
+          return false;
+        }
         vm.$service.collectTopic('', params, (res) => {
           let results = res.data;
+          vm.isCollect = !vm.isCollect;
           if (results.success === true) {
             vm.$toasted.show('收藏成功');
           } else {
@@ -168,7 +168,7 @@
         let params = {
           accesstoken: vm.accesstoken,
           topic_id: vm.id
-        }
+        };
         vm.$service.deleteTopicCollect('', params, (res) => {
           let results = res.data;
           if (results.success === true) {
@@ -184,11 +184,16 @@
         isLoading: state => state.pageLoading,
         accesstoken: state => state.accesstoken,
         isLogon: state => state.hasLogon
-      })
+      }),
+      editor() {
+        return this.$refs.myQuillEditor.quill;
+      },
+      icon() {
+        return this.colollectIcon = this.isCollect ? 'star_border' : 'star';
+      }
     },
     mounted() {
       this.getDetail();
-      console.log(this.id);
     }
   }
 
@@ -198,12 +203,15 @@
   @leftTxt: left;
   @padding: 20px;
   @margin: 20px;
-  .bb{
+  .bb {
     background-color: #f44336;
   }
+
   .detail {
     padding: 10px;
     width: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     .float-button {
       position: fixed;
       right: 0;
@@ -216,13 +224,17 @@
     .detail-content {
       text-align: @leftTxt;
       word-wrap: break-word;
+      border:1px solid #ccc;
+      padding:1rem;
     }
     .detail-replies-content {
       text-align: @leftTxt;
-
+      .detail-replies-head{
+        margin:1rem 0;
+      }
       .detail-reply-body {
         padding: @margin;
-        border: 1px solid #aaa;
+        border: 1px solid #ccc;
         word-wrap: break-word;
         .reply-head-img {
           width: 50px;

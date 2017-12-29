@@ -9,6 +9,9 @@ const tabCheck = function (tab) {
     case 'ask':
       tab = '问答';
       break;
+    case 'dev':
+      tab = '测试';
+      break;
     default:
       tab = '未知';
       break;
