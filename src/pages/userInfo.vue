@@ -240,6 +240,8 @@
 </script>
 <style scoped lang="less">
   .userInfo {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 10px;
     .flat-button {
       margin: 1rem 0;
