@@ -8,6 +8,11 @@ import TopicDetail from '@/pages/topicDetail'
 import Login from '@/pages/login'
 import UserInfo from '@/pages/userInfo'
 import NewTopic from '@/pages/newTopic'
+import MyCollect from '@/pages/mycollect'
+import MyInfo from '@/pages/myinfo'
+import MyTopic from '@/pages/mytopic'
+import MyResponse from '@/pages/myresponse'
+import NotFind from '@/pages/NotFind'
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -57,6 +62,36 @@ export default new Router({
       name:'newTopic',
       meta:'deep',
       component:NewTopic
+    },
+    {
+      path:'/mycollect',
+      name:'mycollect',
+      meta:'deep',
+      component:MyCollect
+    },
+    {
+      path:'/myinfo',
+      name:'myinfo',
+      meta:'deep',
+      component:MyInfo
+    },
+    {
+      path:'/mytopic',
+      name:'mytopic',
+      meta:'deep',
+      component:MyTopic
+    },
+    {
+      path:'/myresponse',
+      name:'myresponse',
+      meta:'deep',
+      component:MyResponse
+    },
+    {
+      path:'*',
+      name:'404',
+      meta:'deep',
+      component:NotFind
     }
   ],
   scrollBehavior (to, from, savedPosition) {

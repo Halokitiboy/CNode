@@ -9,6 +9,8 @@ const store = new Vuex.Store({
     hasLogon: false,
     showLogonPanel:false,
     showBar:true,
+    recent_replies:null,
+    recent_topics:null,
     accesstoken:'',//存取用户accesstoken
     userInfo:''//存取用户信息
   },
@@ -33,6 +35,12 @@ const store = new Vuex.Store({
     },
     getUserInfo(state){
       state.userInfo=JSON.parse(localStorage.getItem('userInfo'))|| JSON.parse(sessionStorage.getItem('userInfo'));
+    },
+    setRecentTopics(state){
+      state.recent_topics=JSON.parse(sessionStorage.getItem('recent_topics'));
+    },
+    setRecentReplies(state){
+      state.recent_replies=JSON.parse(sessionStorage.getItem('recent_replies'));
     },
     clearUserInfo(state){
       state.userInfo='';

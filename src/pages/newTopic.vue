@@ -31,7 +31,7 @@
 <script>
   import {mapState} from 'vuex'
   export default {
-    name: '',
+    name: 'newTopic',
     data() {
       return {
         content: '',
@@ -42,11 +42,6 @@
         editorOption: {
           // some quill options
         },
-      }
-    },
-    computed: {
-      editor() {
-        return this.$refs.myQuillEditor.quill
       }
     },
     methods: {
@@ -98,7 +93,10 @@
     computed: {
       ...mapState({
         accesstoken: state => state.accesstoken
-      })
+      }),
+      editor() {
+        return this.$refs.myQuillEditor.quill
+      }
     }
   }
 </script>

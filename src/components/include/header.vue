@@ -1,9 +1,9 @@
 <template>
-  <mu-appbar title="CNode"  style="text-align: left" >
-    <mu-badge slot="left" v-show="!showBar" >
+  <mu-appbar title="CNode" style="text-align: left">
+    <mu-badge slot="left" v-show="!showBar">
       <mu-icon-button icon="arrow_back" @click="goBack"></mu-icon-button>
     </mu-badge>
-    <mu-badge v-show="showBar" content="0" circle secondary slot="right" >
+    <mu-badge v-show="showBar" :content="messageNum" circle secondary slot="right">
       <mu-icon-button icon="notifications" @click="checkInfo"/>
     </mu-badge>
     <mu-badge v-show="showBar" slot="right">
@@ -13,50 +13,71 @@
 </template>
 <script>
   import {mapState} from 'vuex'
+
   export default {
     name: '',
-    props:['showBar'],
+    props: ['showBar'],
     data() {
       return {
         activeIndex: '1',
         activeIndex2: '1',
+        messageNum: ''
       }
     },
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       },
-      goBack(){
-        let vm=this;
+      goBack() {
+        let vm = this;
         vm.$router.go(-1);
         console.log('-1')
       },
-      checkInfo(){
-        let vm=this;
-        if(!vm.hasLogon){
-            vm.$toasted.show('请先登录！')
-        }else{
-          vm.$router.push({name:'userInfo'});
+      checkInfo() {
+        let vm = this;
+        if (!vm.hasLogon) {
+          vm.$toasted.show('请先登录！')
+        } else {
+          vm.$router.push({name: 'userInfo'});
         }
       },
-      newTopic(){
-        let vm=this;
-        if(!vm.hasLogon){
+      newTopic() {
+        let vm = this;
+        if (!vm.hasLogon) {
           vm.$toasted.show('请先登录！')
-        }else{
-          vm.$router.push({name:'newTopic'});
+        } else {
+          vm.$router.push({name: 'newTopic'});
+        }
+      },
+      getMessageCount() {
+        let vm = this;
+        let params = {
+          accesstoken: this.accesstoken
+        };
+        if (this.hasLogon) {
+          vm.$service.getMessageCount('', params, (res) => {
+            let results = res.data;
+            if (results.success === true) {
+              vm.messageNum = results.data.toString();
+            }
+          }, (res) => {
+
+          })
         }
       }
     },
-    computed:({
+    computed: ({
       ...mapState({
-        hasLogon:state=>state.hasLogon
+        hasLogon: state => state.hasLogon,
+        accesstoken: state => state.accesstoken
       })
     }),
-    create:{
-
+    create: {},
+    mounted() {
+      this.getMessageCount();
     },
-    mounted(){
+    activated() {
+      this.getMessageCount();
     }
   }
 

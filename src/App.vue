@@ -2,7 +2,9 @@
   <div id="app">
     <header-body :showBar="showBar"></header-body>
     <main class="el-main">
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
     </main>
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
     <!--<mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">-->

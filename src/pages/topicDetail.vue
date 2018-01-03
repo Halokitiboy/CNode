@@ -1,5 +1,5 @@
 <template>
-  <div class="detail warp" v-show="showPage">
+  <div class="detail warp" v-if="showPage">
     <div id="detail-content">
       <h2>{{qustionData.title}}</h2>
       <p>
@@ -39,6 +39,9 @@
       </div>
     </section>
     <mu-float-button :icon="icon" class="float-button" @click="collectTopic" backgroundColor=""/>
+  </div>
+  <div v-else="!showPage">
+        <h1>加载中。。。</h1>
   </div>
 </template>
 <script>
@@ -86,7 +89,6 @@
           let results = res.data;
           vm.reliesList = [];
           if (results.success === true) {
-            vm.showPage = true;
             vm.qustionData = results.data;
             vm.isCollect = results.data.is_collect;
             vm.qustionData.loginname = results.data.author.loginname;
@@ -97,6 +99,7 @@
               item['create_at'] = vm.$moment(item.create_at).startOf('mm').fromNow();
               item['ups'] = item.ups.length === 0 ? '' : item.ups.length;
             });
+            vm.showPage = true;
           }
 
         }, (res) => {
@@ -192,7 +195,13 @@
         return this.colollectIcon = this.isCollect ? 'star_border' : 'star';
       }
     },
-    mounted() {
+    created(){
+//      this.getDetail();
+    },
+//    mounted() {
+//      this.getDetail();
+//    },
+    activated(){
       this.getDetail();
     }
   }

@@ -1,8 +1,10 @@
 <template>
-  <div class="userInfo" v-if="showPage">
+  <div class="userInfo" v-if="hasLogon">
     <mu-row gutter>
       <mu-col width="100" tablet="50" desktop="33">
-        <img class="userInfo-avstar" :src="avatar_url" alt="">
+        <div style="width: 10rem;height: 10rem;display: inline-block;">
+          <img class="userInfo-avstar" :src="avatar_url" alt="">
+        </div>
         <p>注册日期：{{createTime}}</p>
         <p class="userInfo-name">{{loginname}}</p>
       </mu-col>
@@ -11,91 +13,33 @@
                         color="#FFF" @click="logonOut"/>
       </mu-col>
     </mu-row>
-    <mu-tabs :value="activeTab" @change="handleTabChange">
-      <mu-tab value="tab1" title="我的收藏"/>
-      <mu-tab value="tab2" title="已读消息"/>
-      <mu-tab value="tab3" title="未读消息"/>
-      <mu-tab value="tab4" title="我的话题"/>
-      <mu-tab value="tab5" title="我的回复"/>
-    </mu-tabs>
-    <div v-if="activeTab === 'tab1'">
-      <mu-paper v-if="showCollect" class="paper" :zDepth="2" v-for="(item , index) in collectData" :key="index">
-        <router-link class="collect-item"
-                     :to="{ name: 'topicDetail', params: { id: item.id }}">
-          <div>
-            <p>{{item.title}}</p>
-          </div>
-          <div>
-            <p>最新回复时间：{{item.last_reply_at}}</p>
-          </div>
-        </router-link>
-      </mu-paper>
-      <h3 v-if="!showCollect">
-        您还没有收藏哦！
-      </h3>
-    </div>
-    <div v-if="activeTab === 'tab2'">
-      <mu-paper v-if="showHasReadInfo" class="paper" :zDepth="2" v-for="(item , index) in hasReadInfo" :key="index">
-        <router-link class="collect-item"
-                     :to="{ name: 'topicDetail', params: { id: item.topic.id }}">
-          <div>
-            <h3></h3>
-            <p>{{item.topic.last_reply_at}}&nbsp;&nbsp;{{item.author.loginname}}&nbsp;&nbsp;在话题《{{item.topic.title}}》中@了你</p>
-          </div>
-        </router-link>
-      </mu-paper>
-      <h3 v-if="!showHasReadInfo">
-        没有已读消息
-      </h3>
-    </div>
-    <div v-if="activeTab === 'tab3'">
-      <mu-paper v-if="showNoReadInfo" class="paper" :zDepth="2" v-for="(item , index) in noReadInfo" :key="index">
-        <router-link class="collect-item"
-                     :to="{ name: 'topicDetail', params: { id: item.topic.id }}">
-          <div>
-            <h3></h3>
-            <p>{{item.topic.last_reply_at}}&nbsp;&nbsp;{{item.author.loginname}}&nbsp;&nbsp;在话题《{{item.topic.title}}》中@了你</p>
-          </div>
-        </router-link>
-      </mu-paper>
-      <h3 v-if="!showNoReadInfo">
-        没有未读消息
-      </h3>
-    </div>
-    <div v-if="activeTab === 'tab4'">
-      <mu-paper v-if="showTopic" class="paper" :zDepth="2" v-for="(item , index) in user.recent_topics" :key="index">
-        <router-link class="collect-item"
-                     :to="{ name: 'topicDetail', params: { id: item.id }}">
-          <div>
-            <p>{{item.title}}</p>
-          </div>
-          <div>
-            <p>最新回复时间：{{item.last_reply_at}}</p>
-          </div>
-        </router-link>
-      </mu-paper>
-      <h3 v-if="!showTopic">
-        您还没参与话题
-      </h3>
-    </div>
-    <div v-if="activeTab === 'tab5'">
-      <mu-paper v-if="showReplice" class="paper" :zDepth="2" v-for="(item , index) in user.recent_replies" :key="index">
-        <router-link class="collect-item"
-                     :to="{ name: 'topicDetail', params: { id: item.id }}">
-          <div>
-            <p>{{item.title}}</p>
-          </div>
-          <div>
-            <p>最新回复时间：{{item.last_reply_at}}</p>
-          </div>
-        </router-link>
-      </mu-paper>
-      <h3 v-if="!showReplice">
-        您还没有回复
-      </h3>
-    </div>
+    <hr>
+    <mu-list>
+      <router-link to="/mycollect">
+        <mu-list-item title="我的收藏">
+          <mu-icon slot="left" value="grade"/>
+        </mu-list-item>
+      </router-link>
+      <router-link to="/myinfo">
+        <mu-list-item title="我的消息">
+          <mu-icon slot="left" value="inbox"/>
+        </mu-list-item>
+      </router-link>
+      <router-link to="/mytopic">
+        <mu-list-item title="我的话题">
+          <mu-icon slot="left" value="subject"/>
+        </mu-list-item>
+      </router-link>
+      <router-link to="/myresponse">
+        <mu-list-item title="我的回复">
+          <mu-icon slot="left" value="reply"/>
+        </mu-list-item>
+      </router-link>
+    </mu-list>
+    <mu-divider/>
   </div>
-  <div v-else="!showPage">
+  <div v-else="!hasLogon">
+    <p><i class="material-icons">warning</i></p>
     <p>亲，您还没登录哦！</p>
     <mu-raised-button label="点我登录" class="demo-raised-button" primary @click="goLogin"/>
   </div>
@@ -107,40 +51,20 @@
     name: '',
     data() {
       return {
-        collectData: [],
-        hasReadInfo: [],
-        noReadInfo: [],
         recentReplies: [],
         recentTopics: [],
         user: null,
-        showPage: false,
         activeTab: 'tab1',
         info: null,
         tab: 'tab1',
-        createTime:null,
-        avatar_url:null,
-        loginname:null
+        createTime: null,
+        avatar_url: null,
+        loginname: null
       }
     },
     methods: {
       handleTabChange(val) {
         this.activeTab = val;
-      },
-      collectTopices() {
-        let vm = this;
-        if (vm.hasLogon) {
-          vm.$service.topicAllCollect(vm.userInfo.loginname, {}, (res) => {
-            let results = res.data;
-            if (results.data.length !== 0) {
-              vm.collectData = results.data;
-              vm.collectData.map(function (item, index) {
-                item['last_reply_at'] = vm.$moment(item.last_reply_at).startOf('mm').fromNow();
-              });
-            }
-          }, (res) => {
-            vm.$toasted.show(res);
-          })
-        }
       },
       toppics() {
         let vm = this;
@@ -160,29 +84,8 @@
               vm.recentTopics.map(function (item, index) {
                 item['last_reply_at'] = vm.$moment(item.last_reply_at).startOf('mm').fromNow();
               });
-            }
-          }, (res) => {
-            vm.$toasted.show(res)
-          })
-        }
-      },
-      getMessages() {
-        let vm = this;
-        let params={
-          accesstoken:vm.accesstoken
-        };
-        if(vm.hasLogon){
-          vm.$service.getMessages('', params, (res) => {
-            let result = res.data;
-            if (result.success === true) {
-              vm.hasReadInfo=result.data.has_read_messages;
-              vm.noReadInfo=result.data.hasnot_read_messages;
-              vm.hasReadInfo.map(function (item,index) {
-                  item['topic']['last_reply_at']=vm.$moment(item['topic']['last_reply_at']).startOf('mm').fromNow();
-              });
-              vm.noReadInfo.map(function (item,index) {
-                item['topic']['last_reply_at']=vm.$moment(item['topic']['last_reply_at']).startOf('mm').fromNow();
-              });
+              sessionStorage.setItem('recent_replies',JSON.stringify(vm.recentReplies));
+              sessionStorage.setItem('recent_topics', JSON.stringify(vm.recentTopics));
             }
           }, (res) => {
             vm.$toasted.show(res)
@@ -192,10 +95,7 @@
       checkedUser() {
         let vm = this;
         if (vm.userInfo) {
-          vm.collectTopices();
           vm.toppics();
-          vm.getMessages();
-          vm.showPage = true;
         }
       },
       goLogin() {
@@ -203,7 +103,6 @@
       },
       logonOut() {
         this.$store.dispatch('logonOut');
-        this.showPage = false;
       },
       updateTab() {
         this.activeTab = this.$route.query.tab || 'tab1';
@@ -213,7 +112,7 @@
       ...mapState({
         hasLogon: state => state.hasLogon,
         userInfo: state => state.userInfo,
-        accesstoken:state=>state.accesstoken
+        accesstoken: state => state.accesstoken
       }),
       showCollect() {
         return this.collectData.length > 0;
@@ -234,7 +133,6 @@
     mounted() {
       this.checkedUser();
       this.updateTab();
-
     }
   }
 </script>
@@ -242,7 +140,7 @@
   .userInfo {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-    padding: 10px;
+    padding: 10px 10px 20px;
     .flat-button {
       margin: 1rem 0;
     }
