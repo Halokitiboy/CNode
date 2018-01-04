@@ -33,7 +33,7 @@
         }
       }
     },
-    activated() {
+    mounted() {
       this.getLength();
     }
   }

@@ -1,4 +1,4 @@
-# baisibudejie
+# CNode
 
 > A Vue.js project
 
@@ -32,3 +32,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 2018/01/03
 
 > 更新页面内容
+
+2018/01/04
+
+> 页面更新，满足了基本的需求！

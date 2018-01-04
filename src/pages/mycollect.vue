@@ -50,7 +50,7 @@
         hasLogon: state => state.hasLogon
       })
     }),
-    activated() {
+    mounted() {
       this.collectTopices()
     }
   }
@@ -60,6 +60,7 @@
     padding: 10px;
     .paper {
       padding: .5rem;
+      text-align: left;
     }
   }
 </style>

@@ -8,7 +8,9 @@
       </section>
     </div>
     <section id="replies" class="detail-replies-content">
-      <div class="detail-replies-head"> <mu-raised-button :label="qustionData.reply_count+'条回复'" fullWidth primary/></div>
+      <div class="detail-replies-head">
+        <mu-raised-button :label="qustionData.reply_count+'条回复'" fullWidth primary/>
+      </div>
 
       <div class="detail-reply-body" v-for="(item , key) in reliesList" :key="item.id">
         <div class="detail-reply-author-head">
@@ -40,19 +42,17 @@
     </section>
     <mu-float-button :icon="icon" class="float-button" @click="collectTopic" backgroundColor=""/>
   </div>
-  <div v-else="!showPage">
-        <h1>加载中。。。</h1>
-  </div>
+  <Loading v-else="!showPage"></Loading>
 </template>
 <script>
   import {mapState} from 'vuex'
   import VueStar from 'vue-star'
   import tabCheck from '../lib/tab';
-
+  import Loading from '../components/loading.vue'
   export default {
     name: '',
     props: ['id'],
-    components: {VueStar},
+    components: {VueStar, Loading},
     data() {
       return {
         topPopup: false,
@@ -99,9 +99,10 @@
               item['create_at'] = vm.$moment(item.create_at).startOf('mm').fromNow();
               item['ups'] = item.ups.length === 0 ? '' : item.ups.length;
             });
-            vm.showPage = true;
+            setTimeout(() => {
+              vm.showPage = true;
+            }, 500)
           }
-
         }, (res) => {
           console.log(res)
         })
@@ -195,15 +196,15 @@
         return this.colollectIcon = this.isCollect ? 'star_border' : 'star';
       }
     },
-    created(){
-//      this.getDetail();
+    created() {
+      this.getDetail();
     },
 //    mounted() {
 //      this.getDetail();
 //    },
-    activated(){
-      this.getDetail();
-    }
+//    activated(){
+//      this.getDetail();
+//    },
   }
 
 </script>
@@ -233,13 +234,13 @@
     .detail-content {
       text-align: @leftTxt;
       word-wrap: break-word;
-      border:1px solid #ccc;
-      padding:1rem;
+      border: 1px solid #ccc;
+      padding: 1rem;
     }
     .detail-replies-content {
       text-align: @leftTxt;
-      .detail-replies-head{
-        margin:1rem 0;
+      .detail-replies-head {
+        margin: 1rem 0;
       }
       .detail-reply-body {
         padding: @margin;

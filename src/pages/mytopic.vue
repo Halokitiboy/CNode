@@ -43,7 +43,7 @@
 //        recentReplies: state => state.recent_replies
 //      })
     }),
-    activated() {
+    mounted() {
       this.getLength();
     }
   }
@@ -52,9 +52,9 @@
 <style scoped lang="less">
   .myTopic {
     padding: 10px;
-    text-align: left;
     .paper {
       padding: .5rem;
+      text-align: left;
     }
   }
 </style>

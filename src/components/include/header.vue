@@ -21,7 +21,7 @@
       return {
         activeIndex: '1',
         activeIndex2: '1',
-        messageNum: ''
+        messageNum: '0'
       }
     },
     methods: {

@@ -2,15 +2,14 @@
   <div id="app">
     <header-body :showBar="showBar"></header-body>
     <main class="el-main">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+      <router-view></router-view>
     </main>
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
     <!--<mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">-->
-      <!--<mu-raised-button label="Back Top" class="demo-raised-button" primary/>-->
+    <!--<mu-raised-button label="Back Top" class="demo-raised-button" primary/>-->
     <!--</mu-back-top>-->
     <mu-back-top/>
+
   </div>
 </template>
 <script>
@@ -19,6 +18,7 @@
   import FootBody from './components/include/footer.vue'
   import Logon from './pages/login.vue'
   import {mapState} from 'vuex';
+
   export default {
     name: 'app',
     data() {
@@ -48,12 +48,14 @@
     },
     computed: {
       ...mapState({
-        showBar: state => state.showBar
+        showBar: state => state.showBar,
+        pageLoading: state => state.pageLoading
       })
     },
     components: {HeaderBody, AsideLogin, FootBody, Logon},
     mounted() {
 //     this.urlPath=this.$route.name;
+      console.log(this.$route.name)
     }
   }
 </script>
@@ -73,7 +75,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      .custom-icon{
+      .custom-icon {
         font-size: inherit;
       }
       .el-loading-mask {

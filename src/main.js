@@ -5,6 +5,7 @@ import App from './App';
 import router from './router';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
+import 'muse-ui/dist/theme-carbon.css'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
@@ -50,8 +51,11 @@ const CryptoJS = require("crypto-js");
 let accesstoken = localStorage.getItem('accesstoken') || sessionStorage.getItem('accesstoken');
 let userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
 router.beforeEach((to, from, next) => {
+  console.log(to.name);
+  document.title = to.name;
   // this route requires auth, check if logged in
   // if not, redirect to login page.
+  
   // 判断是否登录
   if (accesstoken && userInfo) {
     store.dispatch('getAccesstoken', {'accesstoken': accesstoken});
@@ -59,8 +63,9 @@ router.beforeEach((to, from, next) => {
     store.dispatch('logonIn');
   }
   //判断是否详情路由
-  if (to.meta === 'deep') {
+  if (to.meta.deep) {
     store.dispatch('showBar', {show: false});
+    
   } else {
     store.dispatch('showBar', {show: true});
   }

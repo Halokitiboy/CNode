@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    pageLoading: false,
+    pageLoading: true,
     hasLogon: false,
     showLogonPanel:false,
     showBar:true,
@@ -15,9 +15,8 @@ const store = new Vuex.Store({
     userInfo:''//存取用户信息
   },
   mutations: {
-    hidePageLoading(state, payload) {
-      state.pageLoading = payload.pageLoading;
-      console.log(state.pageLoading)
+    hidePageLoading(state, pageLoading) {
+      state.pageLoading = pageLoading;
     },
     logonIn(state) {
       state.hasLogon = true;

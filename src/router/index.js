@@ -13,6 +13,7 @@ import MyInfo from '@/pages/myinfo'
 import MyTopic from '@/pages/mytopic'
 import MyResponse from '@/pages/myresponse'
 import NotFind from '@/pages/NotFind'
+
 Vue.use(Router);
 export default new Router({
   routes: [
@@ -40,66 +41,66 @@ export default new Router({
     {
       path: '/topicDetail/:id',
       name: 'topicDetail',
-      meta:'deep',
+      meta: {deep: true},
       component: TopicDetail,
-      props:true
+      props: true
     },
     {
-      path:'/userInfo',
-      name:'userInfo',
+      path: '/userInfo',
+      name: 'userInfo',
       component: UserInfo,
-      props:true
+      props: true
     },
     {
       path: '/login/:redirect',
       name: 'login',
-      meta:'deep',
+      meta: {deep: true},
       component: Login,
-      props:true
+      props: true
     },
     {
-      path:'/newTopic',
-      name:'newTopic',
-      meta:'deep',
-      component:NewTopic
+      path: '/newTopic',
+      name: 'newTopic',
+      meta: {deep: true},
+      component: NewTopic
     },
     {
-      path:'/mycollect',
-      name:'mycollect',
-      meta:'deep',
-      component:MyCollect
+      path: '/mycollect',
+      name: 'mycollect',
+      meta: {deep: true},
+      component: MyCollect
     },
     {
-      path:'/myinfo',
-      name:'myinfo',
-      meta:'deep',
-      component:MyInfo
+      path: '/myinfo',
+      name: 'myinfo',
+      meta: {deep: true},
+      component: MyInfo
     },
     {
-      path:'/mytopic',
-      name:'mytopic',
-      meta:'deep',
-      component:MyTopic
+      path: '/mytopic',
+      name: 'mytopic',
+      meta: {deep: true},
+      component: MyTopic
     },
     {
-      path:'/myresponse',
-      name:'myresponse',
-      meta:'deep',
-      component:MyResponse
+      path: '/myresponse',
+      name: 'myresponse',
+      meta: {deep: true},
+      component: MyResponse
     },
     {
-      path:'*',
-      name:'404',
-      meta:'deep',
-      component:NotFind
+      path: '*',
+      name: '404',
+      meta: {deep: true},
+      component: NotFind
     }
   ],
-  scrollBehavior (to, from, savedPosition) {
+  scrollBehavior(to, from, savedPosition) {
     // return 期望滚动到哪个的位置
     if (savedPosition) {
       return savedPosition
     } else {
-      return { x: 0, y: 0 }
+      return {x: 0, y: 0}
     }
   }
 })

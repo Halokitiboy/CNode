@@ -9,7 +9,7 @@
         <p class="userInfo-name">{{loginname}}</p>
       </mu-col>
       <mu-col width="100" tablet="50" desktop="33">
-        <mu-flat-button label="退出" class="flat-button" icon="power_settings_new" backgroundColor="#7E57C2"
+        <mu-flat-button label="退出" class="flat-button" icon="power_settings_new" backgroundColor="#474A4F"
                         color="#FFF" @click="logonOut"/>
       </mu-col>
     </mu-row>
@@ -22,7 +22,7 @@
       </router-link>
       <router-link to="/myinfo">
         <mu-list-item title="我的消息">
-          <mu-icon slot="left" value="inbox"/>
+          <mu-icon slot="left" value="message"/>
         </mu-list-item>
       </router-link>
       <router-link to="/mytopic">

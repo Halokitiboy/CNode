@@ -2,7 +2,7 @@
   <div class="myinfo">
     <mu-list >
       <mu-list-item :title="'已读消息('+readNum+')'" @click="showReadBox">
-        <mu-icon slot="left" value="inbox"/>
+        <mu-icon slot="left" value="message"/>
       </mu-list-item>
     </mu-list>
     <section v-show="hasread">
@@ -19,7 +19,7 @@
     </section>
     <mu-list >
       <mu-list-item  :title="'未读消息('+noreadNum+')'" @click="showNoReadBox">
-        <mu-icon slot="left" value="inbox"/>
+        <mu-icon slot="left" value="message"/>
       </mu-list-item>
     </mu-list>
     <section v-show="hasnoread">
@@ -93,7 +93,7 @@
         accesstoken: state => state.accesstoken
       })
     }),
-    activated() {
+    mounted() {
       this.getMessages()
     }
   }
@@ -110,6 +110,7 @@
     }
     .paper {
       padding: .5rem;
+      text-align: left;
     }
   }
 </style>
