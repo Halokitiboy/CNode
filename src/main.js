@@ -12,8 +12,14 @@ import 'quill/dist/quill.bubble.css'
 import moment from 'moment';
 import Toasted from 'vue-toasted';
 import Service from './serveice/serveConfig';
-// import './assets/Font-Awesome-3.2.1/css/font-awesome.css';
-// import 'font-awesome/css/font-awesome.css'
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css' //样式文件
+Vue.directive('highlight', function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block);
+  })
+});
 import VueQuillEditor, {Quill} from 'vue-quill-editor';
 import store from './vuex/index';
 
@@ -30,7 +36,6 @@ Vue.use(MuseUI);
 Vue.config.productionTip = false;
 Vue.prototype.$service = Service;
 Vue.prototype.$moment = moment;
-Vue.prototype.$CryptoJS = CryptoJS;
 // require styles
 Vue.use(VueQuillEditor, {
   modules: {
@@ -46,12 +51,11 @@ Vue.use(VueQuillEditor, {
     }
   }
 });
-const CryptoJS = require("crypto-js");
 
 let accesstoken = localStorage.getItem('accesstoken') || sessionStorage.getItem('accesstoken');
 let userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
 router.beforeEach((to, from, next) => {
-  console.log(to.name);
+  // console.log(to.name);
   document.title = to.name;
   // this route requires auth, check if logged in
   // if not, redirect to login page.
@@ -59,13 +63,12 @@ router.beforeEach((to, from, next) => {
   // 判断是否登录
   if (accesstoken && userInfo) {
     store.dispatch('getAccesstoken', {'accesstoken': accesstoken});
-    store.dispatch('getUserInfo',{'userInfo':userInfo});
+    store.dispatch('getUserInfo', {'userInfo': userInfo});
     store.dispatch('logonIn');
   }
   //判断是否详情路由
   if (to.meta.deep) {
     store.dispatch('showBar', {show: false});
-    
   } else {
     store.dispatch('showBar', {show: true});
   }

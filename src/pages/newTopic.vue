@@ -1,5 +1,5 @@
 <template>
-  <div class="newTopic">
+  <div class="newTopic wrap">
     <section class="newTopic-main">
       <div>
         <h3>标题</h3>
@@ -107,6 +107,8 @@
     display: flex;
     height: 100%;
     flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     .newTopic-main {
       flex: 1;
       .newTopic-radio {

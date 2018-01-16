@@ -1,5 +1,5 @@
 <template>
-  <div class="myResponse">
+  <div class="myResponse wrap">
     <mu-paper v-if="hasdata" class="paper" :zDepth="2" v-for="(item , index) in recentTopics" :key="index">
       <router-link class="collect-item"
                    :to="{ name: 'topicDetail', params: { id: item.id }}">

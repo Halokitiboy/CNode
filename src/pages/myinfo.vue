@@ -1,5 +1,5 @@
 <template>
-  <div class="myinfo">
+  <div class="myinfo wrap">
     <mu-list >
       <mu-list-item :title="'已读消息('+readNum+')'" @click="showReadBox">
         <mu-icon slot="left" value="message"/>

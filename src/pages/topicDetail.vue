@@ -4,7 +4,7 @@
       <h2>{{qustionData.title}}</h2>
       <p>
         发布于{{qustionData.create_at}} * 作者{{qustionData.loginname}} * 浏览{{qustionData.visit_count}} * 来自{{qustionData.tab}}</p>
-      <section class="detail-content" v-html="qustionData.content">
+      <section class="detail-content" v-html="qustionData.content" v-highlight>
       </section>
     </div>
     <section id="replies" class="detail-replies-content">
@@ -27,7 +27,7 @@
             <!--@click="goToRePly"></i>-->
           </div>
         </div>
-        <div class="reply-content" v-html="item.content">
+        <div class="reply-content" v-html="item.content" v-highlight>
         </div>
         <span>最新回复时间：{{item.create_at}}</span>
       </div>

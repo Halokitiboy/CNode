@@ -1,5 +1,5 @@
 <template>
-  <mu-appbar title="CNode" style="text-align: left">
+  <mu-appbar title="CNode社区" style="text-align: left">
     <mu-badge slot="left" v-show="!showBar">
       <mu-icon-button icon="arrow_back" @click="goBack"></mu-icon-button>
     </mu-badge>

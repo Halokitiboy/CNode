@@ -1,5 +1,5 @@
 <template>
-  <div class="userInfo" v-if="hasLogon">
+  <div class="userInfo wrap" v-if="hasLogon">
     <mu-row gutter>
       <mu-col width="100" tablet="50" desktop="33">
         <div style="width: 10rem;height: 10rem;display: inline-block;">

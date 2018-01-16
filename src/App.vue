@@ -30,7 +30,7 @@
     },
     methods: {
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+//        console.log(key, keyPath);
       },
       backTopCallBack() {
 
@@ -88,7 +88,6 @@
       .el-main {
         flex: 1;
         display: flex;
-        overflow-y: scroll;
         flex-direction: column;
         img {
           max-width: 100%;
@@ -103,7 +102,7 @@
         .wrap {
           padding: 10px;
           width: 100%;
-          overflow: auto;
+          overflow-y: auto;
           -webkit-overflow-scrolling: touch;
           .mu-paper {
             margin: 1rem 0;
@@ -147,6 +146,11 @@
                 text-align: left;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                a {
+                  p {
+                    word-break: break-all;
+                  }
+                }
               }
               div:nth-of-type(3) {
                 display: flex;
