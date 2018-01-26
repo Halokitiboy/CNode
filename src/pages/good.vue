@@ -49,6 +49,7 @@
           limit: vm.pageLimit,
           tab: 'good'
         };
+//        vm.$store.commit('updatePageLoading', true);
         vm.$service.getTopics('', params, (res) => {
           if (res.data.success === true) {
             let results = res.data;
@@ -57,6 +58,7 @@
               item['last_reply_at'] = vm.$moment(item.last_reply_at).startOf('mm').fromNow();
             });
             vm.data = vm.data.concat(results.data);
+            vm.$store.commit('updatePageLoading', false);
           }
         }, (res) => {
           vm.$toasted.show(res);

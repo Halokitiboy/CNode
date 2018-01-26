@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 import Home from '@/pages/home'
 import Ask from '@/pages/ask'
 import Good from '@/pages/good'

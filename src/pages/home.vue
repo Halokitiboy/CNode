@@ -52,6 +52,7 @@
           limit: vm.pageLimit,
           tab: ''
         };
+//        vm.$store.commit('updatePageLoading',true);
         vm.$service.getTopics('', params, (res) => {
           if (res.data.success === true) {
             let results = res.data;
@@ -61,10 +62,12 @@
               item['tab'] = tabCheck(item.tab);
             });
             vm.data = vm.data.concat(results.data);
+            vm.$store.commit('updatePageLoading', false);
           }
         }, (res) => {
           vm.$toasted.show(res);
         })
+
       },
       loadMore() {
         let vm = this;

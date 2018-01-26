@@ -2,14 +2,13 @@
   <div id="app">
     <header-body :showBar="showBar"></header-body>
     <main class="el-main">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </main>
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
-    <!--<mu-back-top :height="1" :bottom="100" :right="50" :duration="1000" :callBack="backTopCallBack">-->
-    <!--<mu-raised-button label="Back Top" class="demo-raised-button" primary/>-->
-    <!--</mu-back-top>-->
-    <mu-back-top/>
-
+    <!--<mu-back-top/>-->
+    <Loading v-if="pageLoading"></Loading>
   </div>
 </template>
 <script>
@@ -17,6 +16,7 @@
   import AsideLogin from './components/aside/aside.vue'
   import FootBody from './components/include/footer.vue'
   import Logon from './pages/login.vue'
+  import Loading from './components/loading.vue'
   import {mapState} from 'vuex';
 
   export default {
@@ -52,10 +52,14 @@
         pageLoading: state => state.pageLoading
       })
     },
-    components: {HeaderBody, AsideLogin, FootBody, Logon},
+    components: {HeaderBody, AsideLogin, FootBody, Logon,Loading},
     mounted() {
 //     this.urlPath=this.$route.name;
-      console.log(this.$route.name)
+      console.log(this.$route)
+      console.log(document.body.scrollTop)
+      this.$nextTick(function () {
+        window.addEventListener('scroll', this.onScroll)
+      })
     }
   }
 </script>

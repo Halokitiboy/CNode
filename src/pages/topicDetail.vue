@@ -4,7 +4,7 @@
       <h2>{{qustionData.title}}</h2>
       <p>
         发布于{{qustionData.create_at}} * 作者{{qustionData.loginname}} * 浏览{{qustionData.visit_count}} * 来自{{qustionData.tab}}</p>
-      <section class="detail-content" v-html="qustionData.content" v-highlight>
+      <section @click="watchBigImg" class="detail-content" v-html="qustionData.content" v-highlight>
       </section>
     </div>
     <section id="replies" class="detail-replies-content">
@@ -20,9 +20,9 @@
             <p>{{item.author.loginname}}</p>
           </div>
           <div>
-            <i class="custom-icon material-icons" :reply_to_id=" item.reply_id || '' " :reply_id="item.id" :id="item.id"
-               @click="topicUps">thumb_up</i>
-            <span>{{item.ups}}</span>
+            <!--<i class="custom-icon material-icons" :reply_to_id=" item.reply_id || '' " :reply_id="item.id" :id="item.id"-->
+               <!--@click="topicUps" :data-ups="item.ups">thumb_up</i>-->
+            <!--<span>{{item.ups.length}}</span>-->
             <!--<i class="icon icon-reply" :reply_to_id="item.replyToId" :reply_id="item.id" :id="item.id"-->
             <!--@click="goToRePly"></i>-->
           </div>
@@ -31,7 +31,7 @@
         </div>
         <span>最新回复时间：{{item.create_at}}</span>
       </div>
-      <div class="write-reply">
+      <div class="write-reply" name="#reply">
         <quill-editor v-model="replyData.content"
                       ref="myQuillEditor"
                       :options="editorOption"
@@ -40,7 +40,9 @@
         <mu-raised-button class="submit-btn" label="回 复" fullWidth @click="topicReply" primary/>
       </div>
     </section>
-    <mu-float-button :icon="icon" class="float-button" @click="collectTopic" backgroundColor=""/>
+    <mu-float-button :icon="icon" class="float-button" @click="collectTopic" :backgroundColor="bgcolor"/>
+    <!--<mu-float-button icon="reply" class="float-reply" @click.native="toReply" backgroundColor=""/>-->
+    <Layer v-show="showBigImg" :src="src"></Layer>
   </div>
   <Loading v-else="!showPage"></Loading>
 </template>
@@ -49,10 +51,11 @@
   import VueStar from 'vue-star'
   import tabCheck from '../lib/tab';
   import Loading from '../components/loading.vue'
+  import Layer from '../components/layer.vue'
   export default {
     name: '',
     props: ['id'],
-    components: {VueStar, Loading},
+    components: {VueStar, Loading,Layer},
     data() {
       return {
         topPopup: false,
@@ -62,6 +65,9 @@
         replyCount: 0,
         isCollect: null,
         colollectIcon: 'star',
+        showBigImg:false,
+        bgColor:'',
+        src:'',
         replyData: {
           content: '',
           text: '',
@@ -84,7 +90,7 @@
           'mdrender': true,
           'accesstoken': vm.accesstoken
         };
-
+//        vm.showPage=false;
         vm.$service.getTopicsDetail(vm.id, params, (res) => {
           let results = res.data;
           vm.reliesList = [];
@@ -95,9 +101,10 @@
             vm.qustionData.tab = tabCheck(vm.qustionData.tab);
             vm.qustionData.create_at = vm.$moment(results.data.create_at).startOf('mm').fromNow();
             vm.reliesList = vm.qustionData.replies;
+            console.log(vm.qustionData.replies)
             vm.reliesList.map(function (item, index) {
               item['create_at'] = vm.$moment(item.create_at).startOf('mm').fromNow();
-              item['ups'] = item.ups.length === 0 ? '' : item.ups.length;
+//              item['ups'] = item.ups.length === 0 ? '' : item.ups.length;
             });
             setTimeout(() => {
               vm.showPage = true;
@@ -106,6 +113,12 @@
         }, (res) => {
           console.log(res)
         })
+        console.log(document.getElementsByClassName('.detail')[1])
+      },
+      watchBigImg(e){
+        this.src=e.target.attributes['src'].value;
+        this.showBigImg=true
+//        this.$store.commit('updateBigImg',true);
       },
       topicReply() {
         let vm = this;
@@ -132,6 +145,7 @@
       topicUps(e) {
         let vm = this;
         let replyId = e.target.attributes.id.nodeValue;
+
         let params = {
           accesstoken: vm.accesstoken
         };
@@ -187,24 +201,25 @@
       ...mapState({
         isLoading: state => state.pageLoading,
         accesstoken: state => state.accesstoken,
-        isLogon: state => state.hasLogon
+        isLogon: state => state.hasLogon,
+//        showBigImg:state=>state.showBigImg
       }),
       editor() {
         return this.$refs.myQuillEditor.quill;
       },
       icon() {
         return this.colollectIcon = this.isCollect ? 'star_border' : 'star';
+      },
+      bgcolor(){
+        return this.bgColor = this.isCollect ? 'red' : '';
       }
     },
-    created() {
+    mounted(){
+
+    },
+    activated(){
       this.getDetail();
     },
-//    mounted() {
-//      this.getDetail();
-//    },
-//    activated(){
-//      this.getDetail();
-//    },
   }
 
 </script>
@@ -216,7 +231,11 @@
   .bb {
     background-color: #f44336;
   }
-
+  @keyframes rotate {
+    0% { transform: rotate(0deg); }
+    50% { background: orange; }
+    100% { background: yellowgreen; }
+  }
   .detail {
     padding: 10px;
     width: 100%;
@@ -226,6 +245,11 @@
       position: fixed;
       right: 0;
       top: 80%;
+    }
+    .float-reply{
+      position: fixed;
+      right:0;
+      top:87%;
     }
     .el-breadcrumb {
       line-height: 50px;
@@ -249,6 +273,15 @@
         .reply-head-img {
           width: 50px;
           height: 50px;
+          border-radius: 50%;
+          box-shadow: 0px 0px 5px 2px rgba(0,0,0,.15);
+          &:hover{
+            transform: rotate(360deg);
+            transition-delay: .1s;
+            transition-duration: .5s;
+            cursor: pointer;
+            animation: rotate 1s ease 0s 1;
+          }
         }
         .detail-reply-author-head {
           display: flex;
@@ -259,6 +292,7 @@
           }
           div:nth-of-type(1) {
             flex: 2;
+
           }
           div:nth-of-type(2) {
             width: 50px;

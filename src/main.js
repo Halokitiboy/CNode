@@ -5,10 +5,10 @@ import App from './App';
 import router from './router';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-import 'muse-ui/dist/theme-carbon.css'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import 'muse-ui/dist/theme-carbon.css';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 import moment from 'moment';
 import Toasted from 'vue-toasted';
 import Service from './serveice/serveConfig';
@@ -22,7 +22,6 @@ Vue.directive('highlight', function (el) {
 });
 import VueQuillEditor, {Quill} from 'vue-quill-editor';
 import store from './vuex/index';
-
 Vue.use(Toasted, {
   theme: "primary",
   position: "top-center",
@@ -56,6 +55,8 @@ let accesstoken = localStorage.getItem('accesstoken') || sessionStorage.getItem(
 let userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userInfo');
 router.beforeEach((to, from, next) => {
   // console.log(to.name);
+  store.commit('updatePageLoading',true)
+  console.log(new Date())
   document.title = to.name;
   // this route requires auth, check if logged in
   // if not, redirect to login page.
@@ -74,6 +75,15 @@ router.beforeEach((to, from, next) => {
   }
   next()
 });
+router.afterEach(function (to) {
+  // const route_name=to.name;
+  // if(route_name==="userInfo"){
+  //   store.commit('updatePageLoading',false)
+  // }
+  // setTimeout(()=>{
+  store.commit('updatePageLoading',false)
+  // },500)
+})
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
