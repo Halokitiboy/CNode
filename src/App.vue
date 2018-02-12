@@ -2,9 +2,9 @@
   <div id="app">
     <header-body :showBar="showBar"></header-body>
     <main class="el-main">
-      <keep-alive>
+      <!-- <keep-alive> -->
         <router-view></router-view>
-      </keep-alive>
+      <!-- </keep-alive> -->
     </main>
     <foot-body v-show="showBar" :bottomNav="urlPath"></foot-body>
     <!--<mu-back-top/>-->
@@ -54,9 +54,9 @@
     },
     components: {HeaderBody, AsideLogin, FootBody, Logon,Loading},
     mounted() {
-//     this.urlPath=this.$route.name;
-      console.log(this.$route)
-      console.log(document.body.scrollTop)
+// //     this.urlPath=this.$route.name;
+//       console.log(this.$route)
+//       console.log(document.body.scrollTop)
       this.$nextTick(function () {
         window.addEventListener('scroll', this.onScroll)
       })

@@ -215,11 +215,11 @@
       }
     },
     mounted(){
-
+          this.getDetail();
     },
-    activated(){
-      this.getDetail();
-    },
+    // activated(){
+    //   this.getDetail();
+    // },
   }
 
 </script>

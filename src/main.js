@@ -56,7 +56,7 @@ let userInfo = localStorage.getItem('userInfo') || sessionStorage.getItem('userI
 router.beforeEach((to, from, next) => {
   // console.log(to.name);
   store.commit('updatePageLoading',true)
-  console.log(new Date())
+  // console.log(new Date())
   document.title = to.name;
   // this route requires auth, check if logged in
   // if not, redirect to login page.
