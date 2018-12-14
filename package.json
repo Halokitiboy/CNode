@@ -10,7 +10,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run e2e",
     "build": "node build/build.js",
-    "dll":"webpack --config ./build/webpack.dll.config.js"
+    "dll": "webpack --config ./build/webpack.dll.config.js"
   },
   "dependencies": {
     "axios": "^0.17.1",

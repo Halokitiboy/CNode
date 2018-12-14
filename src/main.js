@@ -14,6 +14,8 @@ import Toasted from 'vue-toasted';
 import Service from './serveice/serveConfig';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css' //样式文件
+import javascript from 'highlight.js/lib/languages/javascript';
+hljs.registerLanguage('javascript', javascript);
 Vue.directive('highlight', function (el) {
   let blocks = el.querySelectorAll('pre code');
   blocks.forEach((block) => {
